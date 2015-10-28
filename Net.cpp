@@ -20,8 +20,6 @@ class Net
         {
             for (u32 i = 0; i < Layers.size(); i++)
             {
-                for_each(inputs.begin(), inputs.end(), [](f64 x) { std::cout << x << " "; } );
-                std::cout << "\n";
                 inputs = eval_layer(i, inputs);
             }
 
