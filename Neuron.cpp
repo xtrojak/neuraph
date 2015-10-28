@@ -41,7 +41,6 @@ class Neuron
             }
 
             Output = Sigma(acc);
-            std::cout << acc << Output << "\n";
             return Output;
         }
 
