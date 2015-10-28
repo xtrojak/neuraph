@@ -1,4 +1,4 @@
-FILES = Neuron.cpp
+FILES = Neuron.cpp Net.cpp main.cpp
 
 all: 
-	gcc $(FILES) -std=c++11 -I. -o main
+	g++ $(FILES) -lstdc++ -std=c++11 -I. -o main
