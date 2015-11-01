@@ -1,17 +1,32 @@
 #include "Net.cpp"
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
+
 // Activation functions
-f64 threshold(double x)
+f64 linear(f64 x)
 {
     return (x >= 0) ? 1 : 0;
 }
 
+f64 sigmoidal(f64 x)
+{
+    return 1.0 / (1 + exp(x));
+}
+
+f64 dsigmoidal(f64 x)
+{
+    f64 ex = exp(x);
+    f64 ex1 = 1 + ex;
+    return -ex / (ex1*ex1);
+}
+
+
 int main(int argc, char **argv)
 {
-    Net n = Net(std::vector<u32> {2, 2, 1}, &threshold);
+    Net n = Net(std::vector<u32> {2, 2, 1}, &sigmoidal, &dsigmoidal);
 
     n.getLayer(0)[0].setWeights(std::vector<f64> {-1, 2, 2});
     n.getLayer(0)[1].setWeights(std::vector<f64> {3, -2, -2});

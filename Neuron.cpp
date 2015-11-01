@@ -10,9 +10,10 @@
 class Neuron
 {
     public:
-        Neuron(u32 num_weights, f64 (*fun) (f64))
+        Neuron(u32 num_weights, f64 (*fun) (f64), f64 (*dfun) (f64))
         {
             Sigma = fun;
+            dSigma = dfun;
             Output = 0.f;
             
             Weights.resize(num_weights);
@@ -31,6 +32,11 @@ class Neuron
             return Weights;
         }
 
+        std::vector<f64> getWeights()
+        {
+            return Weights;
+        }
+
         f64 calculate(const std::vector<f64> &inputs)
         {
             //std::cout << "W:" << Weights.size() << " I:" << inputs.size() << "\n";
@@ -39,19 +45,26 @@ class Neuron
             {
                 acc += Weights[i] * inputs[i-1];
             }
-
+            
             Output = Sigma(acc);
+            dOutput = dSigma(acc);
             return Output;
         }
-
+        
         f64 getOutput()
         {
             return Output;
         }
 
+        f64 getdOutput()
+        {
+            return dOutput;
+        }
+
     private:
         std::vector<f64> Weights;
         f64 (*Sigma) (f64);
-        f64 Output;
+        f64 (*dSigma) (f64);
+        f64 Output, dOutput;
 };
 

@@ -6,12 +6,12 @@
 class Net
 {
     public:
-        Net(std::vector<u32> layers, f64 (*fun) (f64))
+        Net(std::vector<u32> layers, f64 (*fun) (f64), f64 (*dfun) (f64))
         {
             for (u32 i = 1; i < layers.size(); i++)
             {
                 std::vector<Neuron> layer;
-                layer.assign(layers[i], Neuron(layers[i-1], fun));
+                layer.assign(layers[i], Neuron(layers[i-1], fun, dfun));
                 Layers.push_back(layer);
             }
         }
@@ -29,6 +29,11 @@ class Net
         std::vector<Neuron>& getLayer(u32 layer)
         {
             return Layers[layer];
+        }
+
+        const f64 getLayerCount() const
+        {
+            return Layers.size();
         }
 
     private:
