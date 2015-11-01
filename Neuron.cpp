@@ -1,3 +1,6 @@
+#ifndef NEURON_INCLUDED
+#define NEURON_INCLUDED
+
 #include "types.h"
 #include <algorithm>
 #include <vector>
@@ -68,3 +71,4 @@ class Neuron
         f64 Output, dOutput;
 };
 
+#endif

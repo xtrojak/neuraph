@@ -1,3 +1,6 @@
+#ifndef NET_INCLUDED
+#define NET_INCLUDED
+
 #include "types.h"
 #include "Neuron.cpp"
 #include <vector>
@@ -56,3 +59,4 @@ class Net
 
 };
 
+#endif

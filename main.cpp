@@ -1,4 +1,5 @@
 #include "Net.cpp"
+#include "Teacher.cpp"
 #include <iostream>
 #include <math.h>
 
@@ -28,10 +29,22 @@ int main(int argc, char **argv)
 {
     Net n = Net(std::vector<u32> {2, 2, 1}, &sigmoidal, &dsigmoidal);
 
-    n.getLayer(0)[0].setWeights(std::vector<f64> {-1, 2, 2});
-    n.getLayer(0)[1].setWeights(std::vector<f64> {3, -2, -2});
-    n.getLayer(1)[0].setWeights(std::vector<f64> {-2, 1, 1});
-    
+    vector< tuple< vector<f64>, vector<f64> >> data = {
+        make_tuple(vector<f64> {1,1}, vector<f64> {0}),
+        make_tuple(vector<f64> {0,0}, vector<f64> {0}),
+        make_tuple(vector<f64> {1,0}, vector<f64> {1}),
+        make_tuple(vector<f64> {0,1}, vector<f64> {1})
+    };
+    n = backtrack(data, n);
+    n = backtrack(data, n);
+    n = backtrack(data, n);
+    n = backtrack(data, n);
+    n = backtrack(data, n);
+//
+//    n.getLayer(0)[0].setWeights(std::vector<f64> {-1, 2, 2});
+//    n.getLayer(0)[1].setWeights(std::vector<f64> {3, -2, -2});
+//    n.getLayer(1)[0].setWeights(std::vector<f64> {-2, 1, 1});
+//    
     cout << "(0, 0) -> " << n.eval(std::vector<f64> {0, 0})[0] <<
         "\n(0, 1) -> " << n.eval(std::vector<f64> {0, 1})[0] <<
         "\n(1, 0) -> " << n.eval(std::vector<f64> {1, 0})[0] <<
