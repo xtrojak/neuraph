@@ -4,6 +4,7 @@
 #include "types.h"
 #include "Neuron.cpp"
 #include <vector>
+#include <iostream>
 
 
 class Net
@@ -14,7 +15,7 @@ class Net
             for (u32 i = 1; i < layers.size(); i++)
             {
                 std::vector<Neuron> layer;
-                layer.assign(layers[i], Neuron(layers[i-1], fun, dfun));
+                layer.assign(layers[i], Neuron(layers[i-1]+1, fun, dfun));
                 Layers.push_back(layer);
             }
         }
@@ -27,6 +28,20 @@ class Net
             }
 
             return inputs;
+        }
+
+        void print() const
+        {
+            for (i32 i = Layers.size() - 1; i >= 0; --i)
+            {
+                for (u32 j = 0; j < Layers[i].size(); j++)
+                {
+                    for (u32 k = 0; k < Layers[i][j].getWeights().size(); k++)
+                        std::cout << Layers[i][j].getWeights()[k] << " ";
+                    std::cout << " | ";
+                }
+                std::cout << "\n";
+            }
         }
 
         std::vector<Neuron>& getLayer(u32 layer)

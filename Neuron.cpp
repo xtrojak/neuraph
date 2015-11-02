@@ -19,10 +19,10 @@ class Neuron
             dSigma = dfun;
             Output = 0.f;
             
-            Weights.resize(num_weights);
-            std::mt19937 generator(23);
+            std::random_device generator;
             std::uniform_real_distribution<f64> dis(-RAND_INIT, RAND_INIT);
-            for_each(Weights.begin(), Weights.end(), [&](f64 x) { dis(generator); });
+            for (u32 i = 0; i < num_weights; i++)
+                Weights.push_back(dis(generator));
         }
 
         void setWeights(const std::vector<f64> &new_weights)
