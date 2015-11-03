@@ -16,8 +16,8 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
         net.eval(get<0>(ideals[i]));
         
         // calculate the error for the first layer
+        const vector<Neuron> top_layer = net.getLayer(net.getLayerCount()-1);
         vector<f64> prev_layer;
-        vector<Neuron> top_layer = net.getLayer(net.getLayerCount()-1);
         u32 layer_length = top_layer.size();
         for (u32 n = 0; n < layer_length; n++)
             prev_layer.push_back(top_layer[n].getOutput() - get<1>(ideals[i])[n]);

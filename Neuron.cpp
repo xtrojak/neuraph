@@ -54,12 +54,12 @@ class Neuron
             return Output;
         }
         
-        f64 getOutput()
+        const f64 getOutput() const
         {
             return Output;
         }
 
-        f64 getdOutput()
+        const f64 getdOutput() const
         {
             return dOutput;
         }
