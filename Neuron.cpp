@@ -2,7 +2,6 @@
 #define NEURON_INCLUDED
 
 #include "types.h"
-#include <algorithm>
 #include <vector>
 #include <random>
 #include <iostream>
@@ -25,24 +24,19 @@ class Neuron
                 Weights.push_back(dis(generator));
         }
 
-        void setWeights(const std::vector<f64> &new_weights)
+        // Remember that the 0th weight is the neuron bias.
+        f64& getWeight(u32 index)
         {
-            Weights = new_weights;
+            return Weights[index];
         }
 
-        const std::vector<f64> getWeights() const
+        const f64 getWeight(u32 index) const
         {
-            return Weights;
-        }
-
-        std::vector<f64> getWeights()
-        {
-            return Weights;
+            return Weights[index];
         }
 
         f64 calculate(const std::vector<f64> &inputs)
         {
-            //std::cout << "W:" << Weights.size() << " I:" << inputs.size() << "\n";
             f64 acc = Weights[0];
             for (u32 i = 1; i < Weights.size(); i++)
             {
@@ -52,6 +46,12 @@ class Neuron
             Output = Sigma(acc);
             dOutput = dSigma(acc);
             return Output;
+        }
+
+        void print() const
+        {
+            for (u32 i = 0; i < Weights.size(); i++)
+                std::cout << Weights[i] << " ";
         }
         
         const f64 getOutput() const

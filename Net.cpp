@@ -36,20 +36,24 @@ class Net
             {
                 for (u32 j = 0; j < Layers[i].size(); j++)
                 {
-                    for (u32 k = 0; k < Layers[i][j].getWeights().size(); k++)
-                        std::cout << Layers[i][j].getWeights()[k] << " ";
-                    std::cout << " | ";
+                    Layers[i][j].print();
+                    std::cout << "|";
                 }
                 std::cout << "\n";
             }
         }
 
-        std::vector<Neuron>& getLayer(u32 layer)
+        const std::vector<Neuron> &getLayer(u32 layer) const
         {
-            return Layers[layer];
+            return Layers.at(layer);
         }
 
-        const f64 getLayerCount() const
+        Neuron &getNeuron(u32 layer, u32 neuron)
+        {
+            return Layers.at(layer).at(neuron);
+        }
+
+        const u32 getLayerCount() const
         {
             return Layers.size();
         }

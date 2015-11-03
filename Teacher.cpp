@@ -16,39 +16,39 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
         net.eval(get<0>(ideals[i]));
         
         // calculate the error for the first layer
-        const vector<Neuron> top_layer = net.getLayer(net.getLayerCount()-1);
-        vector<f64> prev_layer;
-        u32 layer_length = top_layer.size();
+        vector<f64> prev_errors;
+        u32 layer_count = net.getLayerCount();
+        u32 layer_length = net.getLayer(layer_count - 1).size();
         for (u32 n = 0; n < layer_length; n++)
-            prev_layer.push_back(top_layer[n].getOutput() - get<1>(ideals[i])[n]);
+            prev_errors.push_back(net.getNeuron(layer_count - 1, n).getOutput() - get<1>(ideals[i])[n]);
 
         // loop over the next layers
-        for (u32 l = net.getLayerCount() - 1; l > 0; l--)
+        for (u32 l = layer_count - 1; l > 0; l--)
         {
-            const u32 ws_per_n = net.getLayer(l-1).size() + 1;
+            const u32 ws_per_n = net.getLayer(l-1).size() + 1; // +1 because of each neuron's bias
             for (u32 n = 0; n < layer_length; n++)
             {
                 for (u32 w = 0; w < ws_per_n; w++)
                 {
-                    new_net.getLayer(l)[n].getWeights()[w] +=
-                        prev_layer[n] * net.getLayer(l)[n].getdOutput() * net.getLayer(l-1)[w].getOutput();
+                    new_net.getNeuron(l, n).getWeight(w) +=
+                        prev_errors[n] * net.getNeuron(l, n).getdOutput() * net.getNeuron(l-1, w).getOutput();
                 }
             }
 
             // calculate the error for the current layer
-            vector<f64> next_layer;
-            f64 next_layer_length = net.getLayer(l-1).size();
-            for (u32 n = 0; n < next_layer_length; n++)
+            vector<f64> next_errors;
+            f64 next_errors_length = net.getLayer(l-1).size();
+            for (u32 n = 0; n < next_errors_length; n++)
             {
                 f64 acc = 0;
                 for (u32 w = 0; w < layer_length; w++)
-                    acc += prev_layer[w] * net.getLayer(l)[w].getdOutput() * net.getLayer(l)[w].getWeights()[n];
+                    acc += prev_errors[w] * net.getNeuron(l, w).getdOutput() * net.getNeuron(l, w).getWeight(n);
 
-                next_layer.push_back(acc);
+                next_errors.push_back(acc);
             }
 
-            prev_layer = next_layer;
-            layer_length = prev_layer.size();
+            prev_errors = next_errors;
+            layer_length = next_errors.size();
         }
 
         // calculate the last layer
@@ -57,8 +57,8 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
         {
             for (u32 w = 0; w < ws_per_n; w++)
             {
-                new_net.getLayer(0)[n].getWeights()[w] +=
-                    prev_layer[n] * net.getLayer(0)[n].getdOutput();
+                new_net.getNeuron(0, n).getWeight(w) +=
+                    prev_errors[n] * net.getNeuron(0, n).getdOutput();
             }
         }
     }
