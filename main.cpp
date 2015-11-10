@@ -28,8 +28,6 @@ f64 dsigmoidal(f64 x)
 int main(int argc, char **argv)
 {
     Net n = Net(std::vector<u32> {2, 2, 1}, &sigmoidal, &dsigmoidal);
-    n.getNeuron(0, 0).getWeight(0) = 666;
-    std::cout << n.getNeuron(0, 0).getWeight(0) << "\n";
 
     n.print();
     cout << "\n";
@@ -41,7 +39,7 @@ int main(int argc, char **argv)
         make_tuple(vector<f64> {0,1}, vector<f64> {1})
     };
 
-    for (u32 i = 0; i < 1; i++)
+    for (u32 i = 0; i < 100; i++)
         n = backtrack(data, n);
 
     n.print();

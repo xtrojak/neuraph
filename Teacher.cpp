@@ -9,6 +9,7 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
 {
     // We will directly update the weights in a copy of the net
     Net new_net = net;
+    f64 speed = 0.5;
     
     const u32 ideals_size = ideals.size();
     for (u32 i = 0; i < ideals_size; i++)
@@ -28,10 +29,11 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
             const u32 ws_per_n = net.getLayer(l-1).size() + 1; // +1 because of each neuron's bias
             for (u32 n = 0; n < layer_length; n++)
             {
-                for (u32 w = 0; w < ws_per_n; w++)
+                new_net.getNeuron(l, n).getWeight(0) += -speed * prev_errors[n] * net.getNeuron(l, n).getdOutput();
+                for (u32 w = 1; w < ws_per_n; w++)
                 {
                     new_net.getNeuron(l, n).getWeight(w) +=
-                        prev_errors[n] * net.getNeuron(l, n).getdOutput() * net.getNeuron(l-1, w).getOutput();
+                        -speed * prev_errors[n] * net.getNeuron(l, n).getdOutput() * net.getNeuron(l-1, w-1).getOutput();
                 }
             }
 
@@ -58,7 +60,7 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
             for (u32 w = 0; w < ws_per_n; w++)
             {
                 new_net.getNeuron(0, n).getWeight(w) +=
-                    prev_errors[n] * net.getNeuron(0, n).getdOutput();
+                    -speed * prev_errors[n] * net.getNeuron(0, n).getdOutput() * get<0>(ideals[i])[n];
             }
         }
     }
