@@ -54,6 +54,11 @@ class Neuron
                 std::cout << Weights[i] << " ";
         }
         
+        void setOutput(f64 o)
+        {
+            Output = o;
+        }
+        
         const f64 getOutput() const
         {
             return Output;

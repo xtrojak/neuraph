@@ -33,13 +33,19 @@ int main(int argc, char **argv)
     cout << "\n";
 
     vector< tuple< vector<f64>, vector<f64> >> data = {
-        make_tuple(vector<f64> {1,1}, vector<f64> {0}),
+        make_tuple(vector<f64> {1,1}, vector<f64> {1}),
         make_tuple(vector<f64> {0,0}, vector<f64> {0}),
-        make_tuple(vector<f64> {1,0}, vector<f64> {1}),
-        make_tuple(vector<f64> {0,1}, vector<f64> {1})
+        make_tuple(vector<f64> {1,0}, vector<f64> {0}),
+        make_tuple(vector<f64> {0,1}, vector<f64> {0})
     };
+//    vector< tuple< vector<f64>, vector<f64> >> data = {
+//        make_tuple(vector<f64> {1,1}, vector<f64> {0}),
+//        make_tuple(vector<f64> {0,0}, vector<f64> {0}),
+//        make_tuple(vector<f64> {1,0}, vector<f64> {1}),
+//        make_tuple(vector<f64> {0,1}, vector<f64> {1})
+//    };
 
-    for (u32 i = 0; i < 100; i++)
+    for (u32 i = 0; i < 1000; i++)
         n = backtrack(data, n);
 
     n.print();
@@ -54,5 +60,10 @@ int main(int argc, char **argv)
         "\n(1, 0) -> " << n.eval(std::vector<f64> {1, 0})[0] <<
         "\n(1, 1) -> " << n.eval(std::vector<f64> {1, 1})[0];
 
+//    cout << "(0, 0) -> " << n.eval(std::vector<f64> {0, 0})[0] <<
+//        "\n(0, 1) -> " << n.eval(std::vector<f64> {0, 1})[0] <<
+//        "\n(1, 0) -> " << n.eval(std::vector<f64> {1, 0})[0] <<
+//        "\n(1, 1) -> " << n.eval(std::vector<f64> {1, 1})[0];
+//
     return 0;
 }

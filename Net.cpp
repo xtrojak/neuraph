@@ -12,6 +12,7 @@ class Net
     public:
         Net(std::vector<u32> layers, f64 (*fun) (f64), f64 (*dfun) (f64))
         {
+            layers.insert(layers.begin(), 0);
             for (u32 i = 1; i < layers.size(); i++)
             {
                 std::vector<Neuron> layer;
@@ -22,7 +23,10 @@ class Net
 
         std::vector<f64> eval(std::vector<f64> inputs)
         {
-            for (u32 i = 0; i < Layers.size(); i++)
+            for (u32 i = 0; i < Layers[0].size(); i++)
+                Layers[0][i].setOutput(inputs[i]);
+
+            for (u32 i = 1; i < Layers.size(); i++)
             {
                 inputs = eval_layer(i, inputs);
             }

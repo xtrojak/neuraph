@@ -9,7 +9,7 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
 {
     // We will directly update the weights in a copy of the net
     Net new_net = net;
-    f64 speed = 0.5;
+    f64 speed = 1.0;
     
     const u32 ideals_size = ideals.size();
     for (u32 i = 0; i < ideals_size; i++)
@@ -51,17 +51,6 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
 
             prev_errors = next_errors;
             layer_length = next_errors.size();
-        }
-
-        // calculate the last layer
-        const u32 ws_per_n = net.getLayer(0).size() + 1;
-        for (u32 n = 0; n < layer_length; n++)
-        {
-            for (u32 w = 0; w < ws_per_n; w++)
-            {
-                new_net.getNeuron(0, n).getWeight(w) +=
-                    -speed * prev_errors[n] * net.getNeuron(0, n).getdOutput() * get<0>(ideals[i])[n];
-            }
         }
     }
     
