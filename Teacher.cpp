@@ -22,8 +22,7 @@ Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net
         u32 layer_length = net.getLayer(layer_count - 1).size();
         for (u32 n = 0; n < layer_length; n++)
             prev_errors.push_back(net.getNeuron(layer_count - 1, n).getOutput() - get<1>(ideals[i])[n]);
-
-        // loop over the next layers
+	
         for (u32 l = layer_count - 1; l > 0; l--)
         {
             const u32 ws_per_n = net.getLayer(l-1).size() + 1; // +1 because of each neuron's bias
