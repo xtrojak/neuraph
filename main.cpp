@@ -24,56 +24,68 @@ f64 dsigmoidal(f64 x)
     return -ex / (ex1*ex1);
 }
 
-
 int main(int argc, char **argv)
 {
-    Net n = Net(std::vector<u32> {3, 2, 1}, &sigmoidal, &dsigmoidal);
+    Net n = Net(std::vector<u32> {2, 2, 1}, &sigmoidal, &dsigmoidal);
+    
+    
 
     n.print();
     cout << "\n";
 
-    vector< tuple< vector<f64>, vector<f64> >> data = {
-        make_tuple(vector<f64> {1,1,1}, vector<f64> {1}),
-        make_tuple(vector<f64> {1,1,0}, vector<f64> {0}),
-        make_tuple(vector<f64> {1,0,1}, vector<f64> {0}),
-        make_tuple(vector<f64> {1,0,0}, vector<f64> {0}),
-        make_tuple(vector<f64> {0,1,1}, vector<f64> {0}),
-        make_tuple(vector<f64> {0,1,0}, vector<f64> {0}),
-        make_tuple(vector<f64> {0,0,1}, vector<f64> {0}),
-        make_tuple(vector<f64> {0,0,0}, vector<f64> {0})
-    };
+    n.getNeuron(1, 0).setWeights(std::vector<f64> {-1, 2, 2});
+    n.getNeuron(1, 1).setWeights(std::vector<f64> {3, -2, -2});
+    n.getNeuron(2, 0).setWeights(std::vector<f64> {-2, 1, 1});
+
+    n.print();
+    cout << "\n";
+
+    cout << "(0, 0) -> " << n.eval(std::vector<f64> {0, 0})[0] <<
+        "\n(0, 1) -> " << n.eval(std::vector<f64> {0, 1})[0] <<
+        "\n(1, 0) -> " << n.eval(std::vector<f64> {1, 0})[0] <<
+        "\n(1, 1) -> " << n.eval(std::vector<f64> {1, 1})[0];
+
+
 //    vector< tuple< vector<f64>, vector<f64> >> data = {
-//        make_tuple(vector<f64> {1,1}, vector<f64> {0}),
-//        make_tuple(vector<f64> {0,0}, vector<f64> {0}),
-//        make_tuple(vector<f64> {1,0}, vector<f64> {1}),
-//        make_tuple(vector<f64> {0,1}, vector<f64> {1})
+//        make_tuple(vector<f64> {1,1,1}, vector<f64> {1}),
+//        make_tuple(vector<f64> {1,1,0}, vector<f64> {0}),
+//        make_tuple(vector<f64> {1,0,1}, vector<f64> {1}),
+//        make_tuple(vector<f64> {1,0,0}, vector<f64> {1}),
+//        make_tuple(vector<f64> {0,1,1}, vector<f64> {1}),
+//        make_tuple(vector<f64> {0,1,0}, vector<f64> {0}),
+//        make_tuple(vector<f64> {0,0,1}, vector<f64> {1}),
+//        make_tuple(vector<f64> {0,0,0}, vector<f64> {0})
 //    };
+    vector< tuple< vector<f64>, vector<f64> >> data = {
+        make_tuple(vector<f64> {1,1}, vector<f64> {0}),
+        make_tuple(vector<f64> {0,0}, vector<f64> {0}),
+        make_tuple(vector<f64> {1,0}, vector<f64> {1}),
+        make_tuple(vector<f64> {0,1}, vector<f64> {1})
+    };
+
+    cout << "\n";
 
     for (u32 i = 0; i < 500; i++)
         n = backtrack(data, n);
 
     n.print();
     cout << "\n";
-
-//    n.getLayer(0)[0].setWeights(std::vector<f64> {-1, 2, 2});
-//    n.getLayer(0)[1].setWeights(std::vector<f64> {3, -2, -2});
-//    n.getLayer(1)[0].setWeights(std::vector<f64> {-2, 1, 1});
-//    
-    cout << "(1, 1, 1) -> " << n.eval(std::vector<f64> {1, 1, 1})[0] <<
-        "\n(1, 1, 0) -> " << n.eval(std::vector<f64> {1, 1, 0})[0] <<
-        "\n(1, 0, 1) -> " << n.eval(std::vector<f64> {1, 0, 1})[0] <<
-        "\n(1, 0, 0) -> " << n.eval(std::vector<f64> {1, 0, 0})[0] <<
-        "\n(0, 1, 1) -> " << n.eval(std::vector<f64> {0, 1, 1})[0] <<
-        "\n(0, 1, 0) -> " << n.eval(std::vector<f64> {0, 1, 0})[0] <<
-        "\n(0, 0, 1) -> " << n.eval(std::vector<f64> {0, 0, 1})[0] <<
-        "\n(0, 0, 0) -> " << n.eval(std::vector<f64> {0, 0, 0})[0];
-
-    cout << "\n";
-
-//    cout << "(0, 0) -> " << n.eval(std::vector<f64> {0, 0})[0] <<
-//        "\n(0, 1) -> " << n.eval(std::vector<f64> {0, 1})[0] <<
-//        "\n(1, 0) -> " << n.eval(std::vector<f64> {1, 0})[0] <<
-//        "\n(1, 1) -> " << n.eval(std::vector<f64> {1, 1})[0];
+    
+//    cout << "(1, 1, 1) -> " << n.eval(std::vector<f64> {1, 1, 1})[0] <<
+//       "\n(1, 1, 0) -> " << n.eval(std::vector<f64> {1, 1, 0})[0] <<
+//        "\n(1, 0, 1) -> " << n.eval(std::vector<f64> {1, 0, 1})[0] <<
+//        "\n(1, 0, 0) -> " << n.eval(std::vector<f64> {1, 0, 0})[0] <<
+//        "\n(0, 1, 1) -> " << n.eval(std::vector<f64> {0, 1, 1})[0] <<
+//        "\n(0, 1, 0) -> " << n.eval(std::vector<f64> {0, 1, 0})[0] <<
+//        "\n(0, 0, 1) -> " << n.eval(std::vector<f64> {0, 0, 1})[0] <<
+//        "\n(0, 0, 0) -> " << n.eval(std::vector<f64> {0, 0, 0})[0];
 //
+//    cout << "\n";
+
+    cout << "(0, 0) -> " << n.eval(std::vector<f64> {0, 0})[0] <<
+        "\n(0, 1) -> " << n.eval(std::vector<f64> {0, 1})[0] <<
+        "\n(1, 0) -> " << n.eval(std::vector<f64> {1, 0})[0] <<
+        "\n(1, 1) -> " << n.eval(std::vector<f64> {1, 1})[0];
+
     return 0;
 }

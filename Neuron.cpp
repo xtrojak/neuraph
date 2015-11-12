@@ -69,6 +69,11 @@ class Neuron
             return dOutput;
         }
 
+	void setWeights(std::vector<f64> vec)
+	{
+	    Weights = vec;
+	}
+
     private:
         std::vector<f64> Weights;
         f64 (*Sigma) (f64);
