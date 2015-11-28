@@ -22,7 +22,7 @@ class Net
             for (u32 i = 1; i < layers.size(); i++)
             {
                 std::vector<Neuron> layer;
-                layer.assign(layers[i], Neuron(layers[i-1]+1, &sigmoidal, &dsigmoidal));
+                layer.assign(layers[i], Neuron(layers[i-1]+1, &activation_fn, &d_activation_fn));
                 Layers.push_back(layer);
             }
         }
@@ -92,17 +92,16 @@ class Net
         }
 
         
-        // Activation functions 
-		static f64 sigmoidal(f64 x) 
+		static f64 activation_fn(f64 x) 
 		{ 
-			return 1.0 / (1 + exp(x)); 
+            return 6 * tanh ( x / 6.0 );
 		} 
 
-		static f64 dsigmoidal(f64 x) 
+		static f64 d_activation_fn(f64 x) 
 		{ 
-			f64 ex = exp(x); 
-			f64 ex1 = 1 + ex; 
-			return -ex / (ex1*ex1); 
+            f64 coshx6 = cosh ( x / 6.0 );
+            f64 coshx3 = cosh ( x / 3.0 ) + 1;
+            return ( 4 * coshx6 * coshx6 ) / ( coshx3 * coshx3 );
 		}
 
     private:
@@ -149,7 +148,7 @@ class Net
                         weights.push_back(w);
                     }
 
-                    Neuron n(weight_count, &sigmoidal, &dsigmoidal);
+                    Neuron n(weight_count, &activation_fn, &d_activation_fn);
                     n.setWeights(weights);
                     layer.push_back(n);
                 }
