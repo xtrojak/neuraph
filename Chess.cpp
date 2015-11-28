@@ -60,25 +60,25 @@ public:
     
     void printBoard(std::vector<f64> &board) const
     {
-        const string WHITE = "prnbqk"
-        const string BLACK = "PRNBQK"
+        std::string WHITE = "prnbqk";
+        std::string BLACK = "PRNBQK";
         for (u32 i = 0; i < 64; i++)
         {
-            if ( num % 8 == 0 )
+            if ( i % 8 == 0 )
             {
-                cout << "\n";
+                std::cout << "\n";
             }
             if ( board[i] > 0 )
             {
-                cout << WHITE.at(board[i]) << " ";
+                std::cout << WHITE.at(board[i]) << " ";
             }
             else if ( board[i] < 0 )
                 {
-                    cout << BLACK.at(std::abs (board[i]) ) << " ";
+                    std::cout << BLACK.at( (-1) * board[i] ) << " ";
                 }
             else 
                 {
-                    cout << ". ";
+                    std::cout << ". ";
                 }
         }
     }

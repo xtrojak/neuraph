@@ -31,8 +31,8 @@ f64 tanhal(f64 x)
 
 f64 dtanhal(f64 x)
 {
-    coshx6 = cosh ( x / 6.0 );
-    coshx3 = cosh ( x / 3.0 ) + 1;
+    f64 coshx6 = cosh ( x / 6.0 );
+    f64 coshx3 = cosh ( x / 3.0 ) + 1;
     return ( 4 * coshx6 * coshx6 ) / ( coshx3 * coshx3 );
 }
 
