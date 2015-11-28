@@ -10,13 +10,13 @@
 class Net
 {
     public:
-        Net(std::vector<u32> layers, f64 (*fun) (f64), f64 (*dfun) (f64))
+        Net(std::vector<u32> layers)
         {
             layers.insert(layers.begin(), 0);
             for (u32 i = 1; i < layers.size(); i++)
             {
                 std::vector<Neuron> layer;
-                layer.assign(layers[i], Neuron(layers[i-1]+1, fun, dfun));
+                layer.assign(layers[i], Neuron(layers[i-1]+1, &sigmoidal, &dsigmoidal));
                 Layers.push_back(layer);
             }
         }
@@ -61,6 +61,19 @@ class Net
         {
             return Layers.size();
         }
+        
+        // Activation functions 
+		static f64 sigmoidal(f64 x) 
+		{ 
+			return 1.0 / (1 + exp(x)); 
+		} 
+
+		static f64 dsigmoidal(f64 x) 
+		{ 
+			f64 ex = exp(x); 
+			f64 ex1 = 1 + ex; 
+			return -ex / (ex1*ex1); 
+		}
 
     private:
         std::vector<f64> eval_layer(u32 layer, const std::vector<f64> &ins)
