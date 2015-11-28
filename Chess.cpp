@@ -31,8 +31,12 @@ public:
             try
             {
                 Move m;
-                m.board = parseBoard(input);
-                m.boardAfter = parseBoard(input);
+        
+                std::string line;
+                std::getline(input, line);
+                m.board = parseBoard(line);
+                std::getline(input, line);
+                m.boardAfter = parseBoard(line);
 
                 std::string player;
                 input >> player;
@@ -52,13 +56,18 @@ public:
         }
     }
 
-    const std::vector<Move> &getMoves() const
+    const u32 getMoveCount() const
     {
-        return Moves;
+        return Moves.size();
+    }
+
+    const Move &getMove(const u32 i) const
+    {
+        return Moves.at(i);
     }
 
     
-    void printBoard(std::vector<f64> &board) const
+    static void printBoard(std::vector<f64> &board)
     {
         std::string WHITE = "prnbqk";
         std::string BLACK = "PRNBQK";
@@ -83,16 +92,12 @@ public:
         }
     }
 
-private:
-    std::vector<Move> Moves;
-
-    const std::vector<f64> parseBoard(std::ifstream &file) const
+    static const std::vector<f64> parseBoard(const std::string &line)
     {
         std::vector<f64> board;
 
-        std::string line, item;
-        std::getline(file, line);
         std::stringstream ss(line);
+        std::string item;
 
         while (std::getline(ss, item, ' '))
         {
@@ -104,6 +109,9 @@ private:
 
         return board;
     }
+
+private:
+    std::vector<Move> Moves;
 
     const std::tuple<f64, f64> parseTuple(std::ifstream &file) const
     {
