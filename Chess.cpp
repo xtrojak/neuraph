@@ -7,6 +7,8 @@
 #include <string>
 
 
+
+
 // Loads and handles a database of chess moves.
 class Chess
 {
@@ -54,6 +56,7 @@ public:
     {
         return Moves;
     }
+
     
     void printBoard(std::vector<f64> &board) const
     {
