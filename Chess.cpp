@@ -6,9 +6,6 @@
 #include <tuple>
 #include <string>
 
-#define WHITE "prnbqk"
-#define BLACK "PRNBQK"
-
 
 // Loads and handles a database of chess moves.
 class Chess
@@ -60,6 +57,8 @@ public:
     
     void printBoard(std::vector<f64> &board) const
     {
+        const string WHITE = "prnbqk"
+        const string BLACK = "PRNBQK"
         for (u32 i = 0; i < 64; i++)
         {
             if ( num % 8 == 0 )
