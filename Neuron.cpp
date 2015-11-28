@@ -24,6 +24,11 @@ class Neuron
                 Weights.push_back(dis(generator));
         }
 
+        const u32 getWeightCount() const
+        {
+            return Weights.size();
+        }
+
         // Remember that the 0th weight is the neuron bias.
         f64& getWeight(u32 index)
         {
