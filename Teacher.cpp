@@ -5,7 +5,7 @@
 using namespace std;
 
 // ideals: vector of (tuples of (input, output))
-Net backtrack(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net)
+Net backprop(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net)
 {
     // We will directly update the weights in a copy of the net
     Net new_net = net;
