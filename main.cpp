@@ -1,71 +1,59 @@
 #include "Net.cpp"
 #include "Teacher.cpp"
+#include "Chess.cpp"
 #include <iostream>
-#include <math.h>
+#include <sstream>
+#include <string.h>
 
 using namespace std;
 
 
 int main(int argc, char **argv)
 {
-    Net n = Net(std::vector<u32> {2, 2, 1});
+    if (argc < 2 || string(argv[1]) == "help")
+    {
+        cout << "Example usage:\n\t" << argv[0] <<
+            "\tnew \"2 3 3 2\" my.net\n\
+            \tteach my.net chess.data\n\
+            \teval \"2 3 4 5 6 4 3 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 -1 -1 -1 -1 -1 -1 -1 -2 -3 -4 -5 -6 -4 -3 -2\"\n\n";
+    }
+    else if (string(argv[1]) == "new")
+    {
+        std::vector<u32> topology;
+        char *tok = strtok(argv[2], " ");
+        while (tok != NULL)
+        {
+            topology.push_back(std::stoi(tok));
+            tok = strtok(NULL, " ");
+        }
 
-    n.print();
-    cout << "\n";
+        Net n(topology);
+        n.serialize(argv[3]);
+    }
+    else if (string(argv[1]) == "teach")
+    {
+        Net n(argv[2]);
+        Chess c(argv[3]);
+        
+        vector< tuple < vector<f64>, vector<f64> >> ideals;
+        for (u32 i = 0; i < c.getMoveCount(); i++)
+        {
+            if (c.getMove(i).white)
+                ideals.push_back(make_tuple(c.getMove(i).board, c.getMove(i).boardAfter));
+        }
 
-//    n.getNeuron(1, 0).setWeights(std::vector<f64> {-1, 2, 2});
-//    n.getNeuron(1, 1).setWeights(std::vector<f64> {3, -2, -2});
-//    n.getNeuron(2, 0).setWeights(std::vector<f64> {-2, 1, 1});
+        Net newN = backprop(ideals, n);
+        newN.serialize(argv[2]);
+    }
+    else if (string(argv[1]) == "eval")
+    {
+        Net n(argv[2]);
+        auto input = Chess::parseBoard(argv[3]);
+        Chess::printBoard(input);
+        auto output = n.eval(input);
+        Chess::printBoard(output);
+    }
 
-    n.print();
-    cout << "\n";
-
-//    cout << "(0, 0) -> " << n.eval(std::vector<f64> {0, 0})[0] <<
-//        "\n(0, 1) -> " << n.eval(std::vector<f64> {0, 1})[0] <<
-//        "\n(1, 0) -> " << n.eval(std::vector<f64> {1, 0})[0] <<
-//        "\n(1, 1) -> " << n.eval(std::vector<f64> {1, 1})[0];
-
-
-    vector< tuple< vector<f64>, vector<f64> >> data = {
-        make_tuple(vector<f64> {1,1,1}, vector<f64> {1}),
-        make_tuple(vector<f64> {1,1,0}, vector<f64> {1}),
-        make_tuple(vector<f64> {1,0,1}, vector<f64> {1}),
-        make_tuple(vector<f64> {1,0,0}, vector<f64> {1}),
-        make_tuple(vector<f64> {0,1,1}, vector<f64> {1}),
-        make_tuple(vector<f64> {0,1,0}, vector<f64> {1}),
-        make_tuple(vector<f64> {0,0,1}, vector<f64> {1}),
-        make_tuple(vector<f64> {0,0,0}, vector<f64> {0})
-    };
-//    vector< tuple< vector<f64>, vector<f64> >> data = {
-//        make_tuple(vector<f64> {1,1}, vector<f64> {0}),
-//        make_tuple(vector<f64> {0,0}, vector<f64> {0}),
-//        make_tuple(vector<f64> {1,0}, vector<f64> {1}),
-//        make_tuple(vector<f64> {0,1}, vector<f64> {1})
-//    };
-
-    cout << "\n";
-
-    for (u32 i = 0; i < 500; i++)
-        n = backtrack(data, n);
-
-    n.print();
-    cout << "\n";
-    
-    cout << "(1, 1, 1) -> " << n.eval(std::vector<f64> {1, 1, 1})[0] <<
-       "\n(1, 1, 0) -> " << n.eval(std::vector<f64> {1, 1, 0})[0] <<
-        "\n(1, 0, 1) -> " << n.eval(std::vector<f64> {1, 0, 1})[0] <<
-        "\n(1, 0, 0) -> " << n.eval(std::vector<f64> {1, 0, 0})[0] <<
-        "\n(0, 1, 1) -> " << n.eval(std::vector<f64> {0, 1, 1})[0] <<
-        "\n(0, 1, 0) -> " << n.eval(std::vector<f64> {0, 1, 0})[0] <<
-        "\n(0, 0, 1) -> " << n.eval(std::vector<f64> {0, 0, 1})[0] <<
-        "\n(0, 0, 0) -> " << n.eval(std::vector<f64> {0, 0, 0})[0];
-
-    cout << "\n";
-
-//    cout << "(0, 0) -> " << n.eval(std::vector<f64> {0, 0})[0] <<
-//        "\n(0, 1) -> " << n.eval(std::vector<f64> {0, 1})[0] <<
-//        "\n(1, 0) -> " << n.eval(std::vector<f64> {1, 0})[0] <<
-//        "\n(1, 1) -> " << n.eval(std::vector<f64> {1, 1})[0];
 
     return 0;
 }
