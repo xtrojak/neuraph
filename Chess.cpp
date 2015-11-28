@@ -4,6 +4,9 @@
 #include <sstream>
 #include <vector>
 #include <tuple>
+#include <string>
+
+
 
 
 // Loads and handles a database of chess moves.
@@ -54,6 +57,31 @@ public:
         return Moves;
     }
 
+    
+    void printBoard(std::vector<f64> &board) const
+    {
+        const string WHITE = "prnbqk"
+        const string BLACK = "PRNBQK"
+        for (u32 i = 0; i < 64; i++)
+        {
+            if ( num % 8 == 0 )
+            {
+                cout << "\n";
+            }
+            if ( board[i] > 0 )
+            {
+                cout << WHITE.at(board[i]) << " ";
+            }
+            else if ( board[i] < 0 )
+                {
+                    cout << BLACK.at(std::abs (board[i]) ) << " ";
+                }
+            else 
+                {
+                    cout << ". ";
+                }
+        }
+    }
 
 private:
     std::vector<Move> Moves;
