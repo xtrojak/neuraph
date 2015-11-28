@@ -5,11 +5,17 @@
 #include "Neuron.cpp"
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 
 class Net
 {
     public:
+        Net(const std::string &filename)
+        {
+            deserialize(filename);
+        }
+
         Net(std::vector<u32> layers)
         {
             layers.insert(layers.begin(), 0);
@@ -34,19 +40,6 @@ class Net
             return inputs;
         }
 
-        void print() const
-        {
-            for (i32 i = Layers.size() - 1; i >= 0; --i)
-            {
-                for (u32 j = 0; j < Layers[i].size(); j++)
-                {
-                    Layers[i][j].print();
-                    std::cout << "|";
-                }
-                std::cout << "\n";
-            }
-        }
-
         const std::vector<Neuron> &getLayer(u32 layer) const
         {
             return Layers.at(layer);
@@ -61,6 +54,43 @@ class Net
         {
             return Layers.size();
         }
+
+        void print() const
+        {
+            for (i32 i = Layers.size() - 1; i >= 0; --i)
+            {
+                for (u32 j = 0; j < Layers[i].size(); j++)
+                {
+                    Layers[i][j].print();
+                    std::cout << "|";
+                }
+                std::cout << "\n";
+            }
+        }
+
+        void serialize(const std::string &filename) const
+        {
+            std::ofstream out;
+            out.open(filename);
+
+            out << Layers.size() << "\n";
+            for (u32 i = 0; i < Layers.size(); i++)
+            {
+                out << Layers[i].size() << " ";
+                for (u32 j = 0; j < Layers[i].size(); j++)
+                {
+                    out << Layers[i][j].getWeightCount() << " ";
+                    for (u32 k = 0; k < Layers[i][j].getWeightCount(); k++)
+                    {      
+                        out << Layers[i][j].getWeight(k) << " ";
+                    }
+                }
+                out << "\n";
+            }
+
+            out.close();
+        }
+
         
         // Activation functions 
 		static f64 sigmoidal(f64 x) 
@@ -76,6 +106,9 @@ class Net
 		}
 
     private:
+        std::vector< std::vector<Neuron> > Layers;
+        
+
         std::vector<f64> eval_layer(u32 layer, const std::vector<f64> &ins)
         {
             u32 neuron_count = Layers[layer].size();
@@ -90,8 +123,42 @@ class Net
             return res;
         }
 
+        void deserialize(const std::string &filename)
+        {
+            std::ifstream input;
+            input.open(filename);
 
-        std::vector< std::vector<Neuron> > Layers;
+            u32 layers;
+            input >> layers;
+            for (u32 l = 0; l < layers; l++)
+            {
+                u32 layer_size;
+                input >> layer_size;
+                std::vector<Neuron> layer;
+
+                for (u32 i = 0; i < layer_size; i++)
+                {
+                    u32 weight_count;
+                    input >> weight_count;
+                    std::vector<f64> weights;
+
+                    for (u32 j = 0; j < weight_count; j++)
+                    {
+                        f64 w;
+                        input >> w;
+                        weights.push_back(w);
+                    }
+
+                    Neuron n(weight_count, &sigmoidal, &dsigmoidal);
+                    n.setWeights(weights);
+                    layer.push_back(n);
+                }
+
+                Layers.push_back(layer);
+            }
+
+            input.close();
+        }
 
 };
 
