@@ -73,22 +73,22 @@ public:
         std::string BLACK = "PRNBQK";
         for (u32 i = 0; i < 64; i++)
         {
-            if ( i % 8 == 0 )
-            {
-                std::cout << "\n";
-            }
             if ( board[i] > 0 )
             {
-                std::cout << WHITE.at(board[i]) << " ";
+                std::cout << WHITE.at(board[i] - 1 ) << " ";
             }
             else if ( board[i] < 0 )
                 {
-                    std::cout << BLACK.at( (-1) * board[i] ) << " ";
+                    std::cout << BLACK.at( (-1) * board[i] - 1 ) << " ";
                 }
             else 
                 {
                     std::cout << ". ";
                 }
+	    if ( (i + 1) % 8 == 0 )
+            {
+                std::cout << "\n";
+            }
         }
     }
 
