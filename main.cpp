@@ -46,12 +46,11 @@ int main(int argc, char **argv)
         Net newN = n;
         while (!ideals.empty())
         {
-            vector< tuple < vector<f64>, vector<f64> >> is;
-            auto dist = (min(100l, abs(distance(ideals.begin(), ideals.end()))));
-            move(ideals.begin(), ideals.begin() + dist, is.begin());
-            ideals.erase(ideals.begin(), ideals.begin() + dist);
+            u32 dist = (min(100u, u32(ideals.size())));
+            vector< tuple < vector<f64>, vector<f64> >> is(ideals.begin(), ideals.begin() + dist);
 
             newN = backprop(is, n);
+            ideals.erase(ideals.begin(), ideals.begin() + dist);
         }
         newN.serialize(argv[2]);
     }
@@ -62,6 +61,10 @@ int main(int argc, char **argv)
         Chess::printBoard(input);
         auto output = n.eval(input);
         Chess::printBoard(output);
+    }
+    else
+    {
+        cout << "Unknown argument\n";
     }
 
 
