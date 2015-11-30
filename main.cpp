@@ -1,6 +1,7 @@
 #include "Net.cpp"
 #include "Teacher.cpp"
 #include "Chess.cpp"
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <string.h>
@@ -42,7 +43,16 @@ int main(int argc, char **argv)
                 ideals.push_back(make_tuple(c.getMove(i).board, c.getMove(i).boardAfter));
         }
 
-        Net newN = backprop(ideals, n);
+        Net newN = n;
+        while (!ideals.empty())
+        {
+            vector< tuple < vector<f64>, vector<f64> >> is;
+            auto dist = (min(100l, abs(distance(ideals.begin(), ideals.end()))));
+            move(ideals.begin(), ideals.begin() + dist, is.begin());
+            ideals.erase(ideals.begin(), ideals.begin() + dist);
+
+            newN = backprop(is, n);
+        }
         newN.serialize(argv[2]);
     }
     else if (string(argv[1]) == "eval")
