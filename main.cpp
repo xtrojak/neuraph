@@ -36,7 +36,7 @@ int main(int argc, char **argv)
         Net n(argv[2]);
         Chess c(argv[3]);
         
-        vector< tuple < vector<f64>, vector<f64> >> ideals;
+        list< tuple < vector<f64>, vector<f64> >> ideals;
         for (u32 i = 0; i < c.getMoveCount(); i++)
         {
             if (c.getMove(i).white)
@@ -46,11 +46,10 @@ int main(int argc, char **argv)
         Net newN = n;
         while (!ideals.empty())
         {
-            u32 dist = (min(100u, u32(ideals.size())));
-            vector< tuple < vector<f64>, vector<f64> >> is(ideals.begin(), ideals.begin() + dist);
-
+            list< tuple< vector<f64>, vector<f64>>> is;
+            u32 dist = min(100u, u32(ideals.size()));
+            is.splice(is.begin(), ideals, ideals.begin(), next(ideals.begin(), dist));
             newN = backprop(is, n);
-            ideals.erase(ideals.begin(), ideals.begin() + dist);
         }
         newN.serialize(argv[2]);
     }

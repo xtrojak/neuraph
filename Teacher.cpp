@@ -1,27 +1,27 @@
 #include "Net.cpp"
+#include <list>
 #include <vector>
 #include <tuple>
 
 using namespace std;
 
 // ideals: vector of (tuples of (input, output))
-Net backprop(const vector< tuple< vector<f64>, vector<f64> >> &ideals, Net &net)
+Net backprop(const list< tuple< vector<f64>, vector<f64> >> &ideals, Net &net)
 {
     // We will directly update the weights in a copy of the net
     Net new_net = net;
     f64 speed = 1.0;
     
-    const u32 ideals_size = ideals.size();
-    for (u32 i = 0; i < ideals_size; i++)
+    for (auto it = ideals.begin(); it != ideals.end(); ++it)
     {
-        net.eval(get<0>(ideals[i]));
-        
+        net.eval(get<0>(*it));
+
         // calculate the error for the first layer
         vector<f64> prev_errors;
         u32 layer_count = net.getLayerCount();
         u32 layer_length = net.getLayer(layer_count - 1).size();
         for (u32 n = 0; n < layer_length; n++)
-            prev_errors.push_back(net.getNeuron(layer_count - 1, n).getOutput() - get<1>(ideals[i])[n]);
+            prev_errors.push_back(net.getNeuron(layer_count - 1, n).getOutput() - get<1>(*it)[n]);
 	
         for (u32 l = layer_count - 1; l > 0; l--)
         {
