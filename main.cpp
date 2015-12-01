@@ -15,8 +15,8 @@ int main(int argc, char **argv)
     {
         cout << "Example usage:\n\t" << argv[0] <<
             "\tnew \"2 3 3 2\" my.net\n\
-            \tteach my.net chess.data\n\
-            \teval \"2 3 4 5 6 4 3 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 -1 -1 -1 -1 -1 -1 -1 -2 -3 -4 -5 -6 -4 -3 -2\"\n\n";
+            \tteach chess.data my.net\n\
+            \teval \"2 3 4 5 6 4 3 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 -1 -1 -1 -1 -1 -1 -1 -2 -3 -4 -5 -6 -4 -3 -2\" my.net\n\n";
     }
     else if (string(argv[1]) == "new")
     {
@@ -33,8 +33,8 @@ int main(int argc, char **argv)
     }
     else if (string(argv[1]) == "teach")
     {
-        Net n(argv[2]);
-        Chess c(argv[3]);
+        Net n(argv[3]);
+        Chess c(argv[2]);
         
         list< tuple < vector<f64>, vector<f64> >> ideals;
         for (u32 i = 0; i < c.getMoveCount(); i++)
@@ -55,8 +55,8 @@ int main(int argc, char **argv)
     }
     else if (string(argv[1]) == "eval")
     {
-        Net n(argv[2]);
-        auto input = Chess::parseBoard(argv[3]);
+        Net n(argv[3]);
+        auto input = Chess::parseBoard(argv[2]);
         Chess::printBoard(input);
         auto output = n.eval(input);
         Chess::printBoard(output);
