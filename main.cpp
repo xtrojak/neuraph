@@ -43,7 +43,7 @@ int main(int argc, char **argv)
                 ideals.push_back(make_tuple(c.getMove(i).board, c.getMove(i).boardAfter));
         }
 
-        u32 example_count = ideals.size();
+        u32 progress = 0, example_count = ideals.size();
         cout << "Learning on " << example_count << " examples.\n";
 
         Net newN = n;
@@ -54,11 +54,15 @@ int main(int argc, char **argv)
             is.splice(is.begin(), ideals, ideals.begin(), next(ideals.begin(), dist));
             newN = backprop(is, n);
 
-            cout << "\b\b\b\b" << 100-round((f64(ideals.size())/example_count)*100) << "%";
-            cout.flush();
+            u32 new_p = 100-round((f64(ideals.size())/example_count)*100);
+            if (progress != new_p)
+            {
+                cout << new_p << "%\n";
+                progress = new_p;
+            }
         }
+
         newN.serialize(argv[3]);
-        cout << endl;
     }
     else if (string(argv[1]) == "eval")
     {
