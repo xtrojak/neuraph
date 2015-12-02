@@ -15,8 +15,8 @@ int main(int argc, char **argv)
     {
         cout << "Example usage:\n\t" << argv[0] <<
             "\tnew \"2 3 3 2\" my.net\n\
-            \tteach my.net chess.data\n\
-            \teval \"2 3 4 5 6 4 3 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 -1 -1 -1 -1 -1 -1 -1 -2 -3 -4 -5 -6 -4 -3 -2\"\n\n";
+            \tlearn chess.data my.net\n\
+            \teval \"2 3 4 5 6 4 3 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 -1 -1 -1 -1 -1 -1 -1 -2 -3 -4 -5 -6 -4 -3 -2\" my.net\n\n";
     }
     else if (string(argv[1]) == "new")
     {
@@ -31,10 +31,10 @@ int main(int argc, char **argv)
         Net n(topology);
         n.serialize(argv[3]);
     }
-    else if (string(argv[1]) == "teach")
+    else if (string(argv[1]) == "learn")
     {
-        Net n(argv[2]);
-        Chess c(argv[3]);
+        Net n(argv[3]);
+        Chess c(argv[2]);
         
         list< tuple < vector<f64>, vector<f64> >> ideals;
         for (u32 i = 0; i < c.getMoveCount(); i++)
@@ -43,6 +43,9 @@ int main(int argc, char **argv)
                 ideals.push_back(make_tuple(c.getMove(i).board, c.getMove(i).boardAfter));
         }
 
+        u32 progress = 0, example_count = ideals.size();
+        cout << "Learning on " << example_count << " examples.\n";
+
         Net newN = n;
         while (!ideals.empty())
         {
@@ -50,14 +53,24 @@ int main(int argc, char **argv)
             u32 dist = min(100u, u32(ideals.size()));
             is.splice(is.begin(), ideals, ideals.begin(), next(ideals.begin(), dist));
             newN = backprop(is, n);
+
+            u32 new_p = 100-round((f64(ideals.size())/example_count)*100);
+            if (progress != new_p)
+            {
+                cout << new_p << "%\n";
+                progress = new_p;
+            }
         }
-        newN.serialize(argv[2]);
+
+        newN.serialize(argv[3]);
     }
     else if (string(argv[1]) == "eval")
     {
-        Net n(argv[2]);
-        auto input = Chess::parseBoard(argv[3]);
+        Net n(argv[3]);
+        auto input = Chess::parseBoard(argv[2]);
         Chess::printBoard(input);
+        cout << endl;
+
         auto output = n.eval(input);
         Chess::printBoard(output);
     }
