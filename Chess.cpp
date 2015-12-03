@@ -5,7 +5,7 @@
 #include <vector>
 #include <tuple>
 #include <string>
-
+#include <exception>
 
 
 
@@ -101,7 +101,15 @@ public:
 
         while (std::getline(ss, item, ' '))
         {
-            board.push_back(std::stoi(item));
+            try
+			{
+				board.push_back(std::stoi(item));
+			}
+			catch (std::exception &e)
+			{
+				std::cout << e.what() << " " << line << "\n";
+				break;
+			}
         }
 
         if (board.size() != 64)
