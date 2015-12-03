@@ -68,13 +68,14 @@ public:
     }
 
     
-    static void printBoard(std::vector<f64> &board)
+    static void printBoard(const std::vector<f64> &board)
     {
+        auto b1 = board;
         std::vector<std::tuple<f64, f64>> b;
-        while (!board.empty())
+        while (!b1.empty())
         {
-            b.push_back(std::make_tuple(board[0], board[1]));
-            board.erase(board.begin(), board.begin() + 2);
+            b.push_back(std::make_tuple(b1[0], b1[1]));
+            b1.erase(b1.begin(), b1.begin() + 2);
         }
 
         const std::string pieces = "KkQqBBbbNNnnRRrrPPPPPPPPpppppppp";
