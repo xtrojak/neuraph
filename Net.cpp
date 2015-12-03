@@ -94,12 +94,12 @@ class Net
         
 		static f64 activation_fn(f64 x) 
 		{ 
-            x <= 0 ? 0 : x;
+            return x <= 0 ? 0 : x;
 		} 
 
 		static f64 d_activation_fn(f64 x) 
 		{
-            x <= 0 ? 0 : 1; 
+            return x <= 0 ? 0 : 1; 
         }
 
     private:
