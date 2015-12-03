@@ -5,6 +5,7 @@
 #include <vector>
 #include <tuple>
 #include <string>
+#include <algorithm>
 #include <exception>
 
 
@@ -69,27 +70,30 @@ public:
     
     static void printBoard(std::vector<f64> &board)
     {
-        std::string WHITE = "prnbqk";
-        std::string BLACK = "PRNBQK";
-        for (u32 i = 0; i < 64; i++)
+        std::vector<std::tuple<f64, f64>> b;
+        while (!board.empty())
         {
-            if ( board[i] > 0 )
-            {
-                std::cout << WHITE.at(board[i] - 1 ) << " ";
-            }
-            else if ( board[i] < 0 )
-                {
-                    std::cout << BLACK.at( (-1) * board[i] - 1 ) << " ";
-                }
-            else 
-                {
-                    std::cout << ". ";
-                }
-	    if ( (i + 1) % 8 == 0 )
-            {
-                std::cout << "\n";
-            }
+            b.push_back(std::make_tuple(board[0], board[1]));
+            board.erase(board.begin(), board.begin() + 2);
         }
+
+        const std::string pieces = "KkQqBBbbNNnnRRrrPPPPPPPPpppppppp";
+        for (u32 i = 1; i <= 8; i++)
+        {
+            for (u32 j = 1; j <= 8; j++)
+            {
+                auto f = find(b.begin(), b.end(), std::make_tuple(i, j));
+                if (f != b.end())
+                {
+                    u32 index = std::distance(b.begin(), f);
+                    std::cout << pieces.at(index) << " ";
+                }
+                else
+                    std::cout << ". ";
+            }
+            std::cout << "\n";
+        }
+        std::cout << "\n";
     }
 
     static const std::vector<f64> parseBoard(const std::string &line)
