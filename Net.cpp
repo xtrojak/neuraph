@@ -94,15 +94,13 @@ class Net
         
 		static f64 activation_fn(f64 x) 
 		{ 
-            return 6 * tanh ( x / 6.0 );
+            x <= 0 ? 0 : x;
 		} 
 
 		static f64 d_activation_fn(f64 x) 
-		{ 
-            f64 coshx6 = cosh ( x / 6.0 );
-            f64 coshx3 = cosh ( x / 3.0 ) + 1;
-            return ( 4 * coshx6 * coshx6 ) / ( coshx3 * coshx3 );
-		}
+		{
+            x <= 0 ? 0 : 1; 
+        }
 
     private:
         std::vector< std::vector<Neuron> > Layers;
