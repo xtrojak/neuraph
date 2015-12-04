@@ -39,8 +39,10 @@ int main(int argc, char **argv)
         list< tuple < vector<f64>, vector<f64> >> ideals;
         for (u32 i = 0; i < c.getMoveCount(); i++)
         {
+            auto m = c.getMove(i);
             if (c.getMove(i).white)
-                ideals.push_back(make_tuple(c.getMove(i).board, c.getMove(i).boardAfter));
+                ideals.push_back(make_tuple(m.board,
+                            vector<f64> {get<0>(m.from), get<1>(m.from), get<0>(m.to), get<1>(m.to)}));
         }
 
         u32 progress = 0, example_count = ideals.size();
