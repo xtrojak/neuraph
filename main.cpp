@@ -73,8 +73,8 @@ int main(int argc, char **argv)
         Chess::printBoard(input);
         cout << endl;
 
-        auto output = n.eval(input);
-        Chess::printBoard(output);
+        auto o = n.eval(input);
+        cout << "Output: " << o[0] << o[1] << " to " << o[2] << o[3] << endl;
     }
     else
     {
