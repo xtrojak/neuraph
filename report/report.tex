@@ -31,11 +31,16 @@ Použili sme záznamy šachových partií z Games of World Champions\footnotemar
 
 {\centering\textbf{Implementácia}\\}
 
-Implementovali sme viacvrstvú sieť (multilayer perceptron) a zpätnú propagáciu (backpropagation algorithm) v jazyku C++.
+Implementovali sme viacvrstvú sieť (multilayer perceptron) a zpätnú propagáciu (backpropagation algorithm) v jazyku C++. Implementovali sme triedy pre neurón, sieť a šachovnicu. Urobili sme serializáciu siete tak, aby sme po ukončení učenia s ňou mohli znova pracovať aj s odstupom času. Celý program má 3 rôzne funkcie:
 
-\textbf{TBA} rozhranie
+\begin{itemize}
+\item \textbf{new} - vytvorenie novej siete, parameter je \textit{"počet neurónov vo vrstvách"} a názov siete
+\item \textbf{teach} - spustí učenie pomocou spätnej propagácie nad daným vstupným súborom dát a sieťou
+\item \textbf{eval} - vyhodnotí sieť nad daným vstupom pre danú sieť
+\end{itemize}
 
-\newpage
+\textbf{TBA} spustenie, kompilacia, poziadavky na c++ ...
+
 \mysmallsection{Prístup 1}
 
 Vstup tvorený FENmi sme jednoduchým scriptom previedli do sekvencie 64 číslic v rozsahu hodnôt [-6, 6]. Figúrky majú nasledujúcu číselnú reprezentáciu (jedná sa o biele figúrky, čierne majú opačné znamienko):
@@ -62,8 +67,13 @@ Nakoľko sme potrebovali rozsah hodnôt [-6, 6], ako aktivačnú funkciu sme zvo
 F_a=12 \times tanh(\frac{x}{12})
 \end{equation}
 
-\textbf{TBA} trénovacie dáta\\
+Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný tak, že na políčko, \textbf{z} ktorého sa figúrka hýbe, sa priradí číslo nula a políčko, \textbf{na} ktoré sa figúrka hýbe dostane pôvodnú hodnotu figúrky. Nakoľko v trénovacích dátach boli ťahy ako pre bieleho, tak i čierneho hráča, rozhodli sme sa používať iba biele ťahy. Tým sme dáta zmenšili o jenen rozmer (každý ťah čierneho hráča sa dá previesť na ťah bieleho hráča).
+
 \textbf{TBA} nastavenia siete\\
 \textbf{TBA} výsledky??
+
+\mysmallsection{Prístup 2}
+
+Vstup tvorený FENmi sme iným scriptom previedli do sekvencie 64 číslic v rozsahu hodnôt [0, 8]. Čísla sú vnímané ako dvojice, kde každá dvojica predstavuje súradnice konkrétnej figúrky na šachovnici. Poradie figúrok je teda fixne dané. Ak sa figúrka na šachovnici nenachádza, dostane súradnice (0, 0).
 
 \end{document}
