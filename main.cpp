@@ -39,10 +39,14 @@ int main(int argc, char **argv)
         list< tuple < vector<f64>, vector<f64> >> ideals;
         for (u32 i = 0; i < c.getMoveCount(); i++)
         {
-            auto m = c.getMove(i);
-            if (c.getMove(i).white)
-                ideals.push_back(make_tuple(m.board,
-                            vector<f64> {get<0>(m.from), get<1>(m.from), get<0>(m.to), get<1>(m.to)}));
+            auto &m = c.getMove(i);
+            if (m.white)
+                ideals.push_back(make_tuple(m.board, vector<f64> {
+                            get<0>(m.from),
+                            get<1>(m.from),
+                            get<0>(m.to),
+                            get<1>(m.to)}));
+           
         }
 
         u32 progress = 0, example_count = ideals.size();
@@ -54,7 +58,7 @@ int main(int argc, char **argv)
             list< tuple< vector<f64>, vector<f64>>> is;
             u32 dist = min(100u, u32(ideals.size()));
             is.splice(is.begin(), ideals, ideals.begin(), next(ideals.begin(), dist));
-            newN = backprop(is, n);
+            newN = backprop(is, newN);
 
             u32 new_p = 100-round((f64(ideals.size())/example_count)*100);
             if (progress != new_p)
