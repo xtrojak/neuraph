@@ -16,13 +16,13 @@ class Net
             deserialize(filename);
         }
 
-        Net(std::vector<u32> layers)
+        Net(std::vector<u32> layers, f64 (*fn) (f64, bool) = &activation_fn)
         {
             layers.insert(layers.begin(), 0);
             for (u32 i = 1; i < layers.size(); i++)
             {
                 std::vector<Neuron> layer;
-                layer.assign(layers[i], Neuron(layers[i-1]+1, &activation_fn, &d_activation_fn));
+                layer.assign(layers[i], Neuron(layers[i-1]+1, fn));
                 Layers.push_back(layer);
             }
         }
@@ -92,15 +92,14 @@ class Net
         }
 
         
-		static f64 activation_fn(f64 x) 
-		{ 
-            return x <= 0 ? 0 : x;
-		} 
+        static f64 activation_fn(f64 x, bool derivative) 
+        { 
+            if (derivative)
+                return x <= 0 ? 0 : 1; 
+            else
+                return x <= 0 ? 0 : x;
+        } 
 
-		static f64 d_activation_fn(f64 x) 
-		{
-            return x <= 0 ? 0 : 1; 
-        }
 
     private:
         std::vector< std::vector<Neuron> > Layers;
@@ -146,7 +145,7 @@ class Net
                         weights.push_back(w);
                     }
 
-                    Neuron n(weight_count, &activation_fn, &d_activation_fn);
+                    Neuron n(weight_count, &activation_fn);
                     n.setWeights(weights);
                     layer.push_back(n);
                 }
