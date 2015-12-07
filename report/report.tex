@@ -19,7 +19,7 @@ Adam Krupička, Matej Troják
 V našom projekte sme chceli riešiť problém pohybu šachových figúrok po šachovnici. Napadlo nás niekoľko prístupov, ako tento problém riešiť:
 
 \begin{enumerate}
-\item dať sieti na vstup celú šachovnicu a na výstupe očakávať opäť šachovnicu, avšak pozmenenú o jeden validný ťah,
+\item dať sieti na vstup celú šachovnicu a na výstupe očakávať opäť šachovni-cu, avšak pozmenenú o jeden validný ťah,
 \item dať sieti na vstup pozície jednotlivých figúrok a na výstupe očakávať pozmenené pozície figúrok,
 \item dať sieti na vstup celú šachovnicu/pozície figúrok a očakávať na výstupe ťah, ktorý sa má vykonať, t.j. súradnice políčka s \textit{nejakou} figúrkou a súradnice, kam sa má posunúť,
 \item dať sieti na vstup dve šachovnice a sieť odpovie hodnotou medzi 0 a 1 ako \textit{dobrý} je ťah.
@@ -27,7 +27,7 @@ V našom projekte sme chceli riešiť problém pohybu šachových figúrok po š
 
 {\centering\textbf{Zdroj dát}\\}
 
-Použili sme záznamy šachových partií z Games of World Champions\footnotemark[1]\footnotetext[1]{\url{http://www.chess.com/download/view/games-of-world-champions}}. Na dáta sme využili voľne dostupný parser, ktorý ich prekonvertoval do formátu FEN (Forsyth–Edwards Notation), čo je štandartná notácia pre popis priebehu šachovej partie tak, aby mohla byť opätovne zrekonštruovaná. 
+Použili sme záznamy šachových partií z Games of World Champions\footnotemark[1]\footnotetext[1]{\url{http://www.chess.com/download/view/games-of-world-champions}}. Na dáta sme využili voľne dostupný parser, ktorý ich prekonvertoval do formátu FEN (Forsyth–Edwards Notation), čo je štandartná notácia pre popis priebehu šachovej partie tak, aby mohla byť opätovne zrekonštruo-vaná. \\
 
 {\centering\textbf{Implementácia}\\}
 
@@ -35,7 +35,7 @@ Implementovali sme viacvrstvú sieť (multilayer perceptron) a zpätnú propagá
 
 \begin{itemize}
 \item \textbf{new} - vytvorenie novej siete, parameter je \textit{"počet neurónov vo vrstvách"} a názov siete
-\item \textbf{teach} - spustí učenie pomocou spätnej propagácie nad daným vstupným súborom dát a sieťou
+\item \textbf{learn} - spustí učenie pomocou spätnej propagácie nad daným vstupným súborom dát a sieťou
 \item \textbf{eval} - vyhodnotí sieť nad daným vstupom pre danú sieť
 \end{itemize}
 
@@ -64,7 +64,7 @@ prázdne políčko má hodnotu 0.
 Nakoľko sme potrebovali rozsah hodnôt [-6, 6], ako aktivačnú funkciu sme zvolili hyperbolický tangens s upravenými koeficientami tak, aby bol na danom intervale približne lineárny. 
 
 \begin{equation}
-F_a=12 \times tanh(\frac{x}{12})
+F_a(x)=12 \times tanh(\frac{x}{12})
 \end{equation}
 
 Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný tak, že na políčko, \textbf{z} ktorého sa figúrka hýbe, sa priradí číslo nula a políčko, \textbf{na} ktoré sa figúrka hýbe dostane pôvodnú hodnotu figúrky. Nakoľko v trénovacích dátach boli ťahy ako pre bieleho, tak i čierneho hráča, rozhodli sme sa používať iba biele ťahy. Tým sme dáta zmenšili o jenen rozmer (každý ťah čierneho hráča sa dá previesť na ťah bieleho hráča).
@@ -75,5 +75,25 @@ Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný t
 \mysmallsection{Prístup 2}
 
 Vstup tvorený FENmi sme iným scriptom previedli do sekvencie 64 číslic v rozsahu hodnôt [0, 8]. Čísla sú vnímané ako dvojice, kde každá dvojica predstavuje súradnice konkrétnej figúrky na šachovnici. Poradie figúrok je teda fixne dané. Ak sa figúrka na šachovnici nenachádza, dostane súradnice (0, 0).
+
+{\centering\textbf{Riešenie}\\}
+
+Pre potrebný rozsah hodnôt sme zvolili funkciu:
+
+\[ F_a(x) =
+  \begin{cases}
+    \quad 0  & \quad x \leq 0 \\
+    \quad x  & \quad x > 0\\
+  \end{cases}
+\]
+
+Ťah je reprezentovaný zmenou súradníc jednej figúrky. V prípade, ak sa jedná o ťah, kedy nepriateľ stráca figúrku (t.j. figúrka sa presúva na súradnice už zahrnuté v sekvencii súradníc), súradnice vyhodenej figúrky sú (0, 0).
+
+\textbf{TBA} nastavenia siete\\
+\textbf{TBA} výsledky??
+
+\mysmallsection{Prístup 3}
+
+Tento prístup je veľmi podobný prístupu číslo 2, rozdiel je iba vo výstupe siete. Namiesto toho, aby bol ťah zahrnutý v rozložení novej šachovnice, je výstupom explicitne daný ťah, t.j. súradnice políčka, \textbf{z} ktorého sa má figúrka pohnúť a súradnice \textbf{kam} sa má figúrka pohnúť.
 
 \end{document}
