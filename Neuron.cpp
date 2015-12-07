@@ -12,10 +12,9 @@
 class Neuron
 {
     public:
-        Neuron(u32 num_weights, f64 (*fun) (f64), f64 (*dfun) (f64))
+        Neuron(u32 num_weights, f64 (*fun) (f64, bool))
         {
-            Sigma = fun;
-            dSigma = dfun;
+            ActivationFn = fun;
             Output = 0.f;
             
             std::random_device generator;
@@ -48,8 +47,8 @@ class Neuron
                 acc += Weights[i] * inputs[i-1];
             }
             
-            Output = Sigma(acc);
-            dOutput = dSigma(acc);
+            Output = ActivationFn(acc, false);
+            dOutput = ActivationFn(acc, true);
             return Output;
         }
 
@@ -81,8 +80,7 @@ class Neuron
 
     private:
         std::vector<f64> Weights;
-        f64 (*Sigma) (f64);
-        f64 (*dSigma) (f64);
+        f64 (*ActivationFn) (f64, bool);
         f64 Output, dOutput;
 };
 

@@ -6,11 +6,10 @@
 using namespace std;
 
 // ideals: vector of (tuples of (input, output))
-Net backprop(const list< tuple< vector<f64>, vector<f64> >> &ideals, Net &net)
+Net backprop(const list< tuple< vector<f64>, vector<f64> >> &ideals, f64 speed, Net &net)
 {
     // We will directly update the weights in a copy of the net
     Net new_net = net;
-    f64 speed = 1.0;
     
     for (auto it = ideals.begin(); it != ideals.end(); ++it)
     {
