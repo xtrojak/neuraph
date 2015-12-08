@@ -4,6 +4,7 @@
 #include <tuple>
 #include <random>
 #include <ctime>
+#include <sstream>
 #include <iostream>
 
 class Polynoms
@@ -16,6 +17,50 @@ class Polynoms
 
             for (u32 i = 0; i < count; i++)
                 generate(minDeg, maxDeg);
+        }
+
+        static void print(const std::vector<f64> &poly)
+        {
+            if (poly[0] != 0)
+                std::cout << poly[0] << " + ";
+
+            for (u32 i = 1; i < poly.size(); i++)
+                if (poly[i] != 0)
+                    std::cout << poly[i] << "x^" << i << " + ";
+
+            std::cout << "\b\b\b  \n";
+        }
+
+        static const std::vector<f64> parsePoly(const std::string &line)
+        {
+			std::vector<f64> p;
+			std::stringstream ss(line);
+			std::string item;
+
+			while (std::getline(ss, item, ' '))
+			{
+				try
+				{
+					p.push_back(std::stoi(item));
+				}
+				catch (std::exception &e)
+				{
+					std::cout << e.what() << " " << line << "\n";
+					break;
+				}
+			}
+
+			return p;
+		}
+        
+        static std::vector<f64> differentiate(const std::vector<f64> &polynomial)
+        {
+            std::vector<f64> p;
+
+            for (u32 i = 1; i < polynomial.size(); i++)
+                p.push_back(polynomial[i] * i);
+
+            return p;
         }
 
         std::list< std::tuple< std::vector<f64>, std::vector<f64> > > &getPolynoms()
@@ -41,15 +86,5 @@ class Polynoms
                 polynomial.push_back(coeffs_dis(random_device));
 
             Polys.push_back(std::make_tuple(polynomial, differentiate(polynomial)));
-        }
-
-        std::vector<f64> differentiate(std::vector<f64> &polynomial)
-        {
-            std::vector<f64> p;
-
-            for (u32 i = 1; i < polynomial.size(); i++)
-                p.push_back(polynomial[i] * (i-1));
-
-            return p;
         }
 };
