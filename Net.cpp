@@ -145,7 +145,7 @@ class Net
                         weights.push_back(w);
                     }
 
-                    Neuron n(weight_count, &activation_fn);
+                    Neuron n(0, &activation_fn);
                     n.setWeights(weights);
                     layer.push_back(n);
                 }
