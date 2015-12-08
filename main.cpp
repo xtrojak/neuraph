@@ -1,6 +1,6 @@
 #include "Net.cpp"
 #include "Teacher.cpp"
-#include "Chess.cpp"
+#include "Polynoms.cpp"
 #include <algorithm>
 #include <iostream>
 #include <sstream>
@@ -34,46 +34,45 @@ int main(int argc, char **argv)
     }
     else if (string(argv[1]) == "learn")
     {
+        u32 example_count = stoi(argv[2]);
+        example_count += 100 + (example_count % 100);
+
         Net n(argv[3]);
-        Chess c(argv[2]);
-        
-        list< tuple < vector<f64>, vector<f64> >> ideals;
-        for (u32 i = 0; i < c.getMoveCount(); i++)
-        {
-            if (c.getMove(i).white)
-                ideals.push_back(make_tuple(c.getMove(i).board, c.getMove(i).boardAfter));
-        }
-
-        u32 progress = 0, example_count = ideals.size();
-        cout << "Learning on " << example_count << " examples.\n";
-
+        Polynoms p(2, 5, stoi(argv[2]));
         Net newN = n;
-        while (!ideals.empty())
+        u32 progress = 0;
+        
+        cout << "Learning on " << example_count << " examples.\n";
+        auto start = p.getPolynoms().begin(), end = start;
+        advance(end, 100);
+        do
         {
-            list< tuple< vector<f64>, vector<f64>>> is;
-            u32 dist = min(100u, u32(ideals.size()));
-            is.splice(is.begin(), ideals, ideals.begin(), next(ideals.begin(), dist));
+            list<tuple<vector<f64>, vector<f64>>> is(start, end);
             newN = backprop(is, 1, newN);
 
-            u32 new_p = 100-round((f64(ideals.size())/example_count)*100);
+            u32 new_p = 100-round((f64(p.getPolynoms().size())/example_count)*100);
             if (progress != new_p)
             {
                 cout << new_p << "%\n";
                 progress = new_p;
             }
+
+            start = end;
+            advance(end, 100);
         }
+        while (start != p.getPolynoms().end());
 
         newN.serialize(argv[3]);
     }
     else if (string(argv[1]) == "eval")
     {
         Net n(argv[3]);
-        auto input = Chess::parseBoard(argv[2]);
-        Chess::printBoard(input);
+        auto input = Polynoms::parsePoly(argv[2]);
+        Polynoms::print(input);
         cout << endl;
 
         auto output = n.eval(input);
-        Chess::printBoard(output);
+        Polynoms::print(output);
     }
     else if (string(argv[1]) == "test")
     {
