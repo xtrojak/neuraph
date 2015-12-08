@@ -35,16 +35,17 @@ int main(int argc, char **argv)
     else if (string(argv[1]) == "learn")
     {
         u32 example_count = stoi(argv[2]);
-        example_count += 100 + (example_count % 100);
+        example_count += 100 - (example_count % 100);
 
         Net n(argv[3]);
-        Polynoms p(2, 5, stoi(argv[2]));
+        Polynoms p(2, 5, example_count);
         Net newN = n;
         u32 progress = 0;
         
         cout << "Learning on " << example_count << " examples.\n";
         auto start = p.getPolynoms().begin(), end = start;
         advance(end, 100);
+
         do
         {
             list<tuple<vector<f64>, vector<f64>>> is(start, end);
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
             u32 new_p = 100-round((f64(p.getPolynoms().size())/example_count)*100);
             if (progress != new_p)
             {
-                cout << new_p << "%\n";
+                cout << new_p << "%\t";
                 progress = new_p;
             }
 
