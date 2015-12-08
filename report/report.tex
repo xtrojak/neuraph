@@ -22,7 +22,7 @@ V našom projekte sme chceli riešiť problém pohybu šachových figúrok po š
 \item dať sieti na vstup celú šachovnicu a na výstupe očakávať opäť šachovni-cu, avšak pozmenenú o jeden validný ťah,
 \item dať sieti na vstup pozície jednotlivých figúrok a na výstupe očakávať pozmenené pozície figúrok,
 \item dať sieti na vstup celú šachovnicu/pozície figúrok a očakávať na výstupe ťah, ktorý sa má vykonať, t.j. súradnice políčka s \textit{nejakou} figúrkou a súradnice, kam sa má posunúť,
-\item dať sieti na vstup dve šachovnice a sieť odpovie hodnotou medzi 0 a 1 ako \textit{dobrý} je ťah.
+\item dať sieti na vstup dve šachovnice a sieť odpovie hodnotou medzi 0 a 1 ako \textit{dobrý} je ťah (inšpirované iným zdrojom, neriešené)
 \end{enumerate}
 
 {\centering\textbf{Zdroj dát}\\}
@@ -38,8 +38,6 @@ Implementovali sme viacvrstvú sieť (multilayer perceptron) a zpätnú propagá
 \item \textbf{learn} - spustí učenie pomocou spätnej propagácie nad daným vstupným súborom dát a sieťou
 \item \textbf{eval} - vyhodnotí sieť nad daným vstupom pre danú sieť
 \end{itemize}
-
-\textbf{TBA} spustenie, kompilacia, poziadavky na c++ ...
 
 \mysmallsection{Prístup 1}
 
@@ -69,9 +67,6 @@ F_a(x)=12 \times tanh(\frac{x}{12})
 
 Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný tak, že na políčko, \textbf{z} ktorého sa figúrka hýbe, sa priradí číslo nula a políčko, \textbf{na} ktoré sa figúrka hýbe dostane pôvodnú hodnotu figúrky. Nakoľko v trénovacích dátach boli ťahy ako pre bieleho, tak i čierneho hráča, rozhodli sme sa používať iba biele ťahy. Tým sme dáta zmenšili o jenen rozmer (každý ťah čierneho hráča sa dá previesť na ťah bieleho hráča).
 
-\textbf{TBA} nastavenia siete\\
-\textbf{TBA} výsledky??
-
 \mysmallsection{Prístup 2}
 
 Vstup tvorený FENmi sme iným scriptom previedli do sekvencie 64 číslic v rozsahu hodnôt [0, 8]. Čísla sú vnímané ako dvojice, kde každá dvojica predstavuje súradnice konkrétnej figúrky na šachovnici. Poradie figúrok je teda fixne dané. Ak sa figúrka na šachovnici nenachádza, dostane súradnice (0, 0).
@@ -89,11 +84,41 @@ Pre potrebný rozsah hodnôt sme zvolili funkciu:
 
 Ťah je reprezentovaný zmenou súradníc jednej figúrky. V prípade, ak sa jedná o ťah, kedy nepriateľ stráca figúrku (t.j. figúrka sa presúva na súradnice už zahrnuté v sekvencii súradníc), súradnice vyhodenej figúrky sú (0, 0).
 
-\textbf{TBA} nastavenia siete\\
-\textbf{TBA} výsledky??
-
 \mysmallsection{Prístup 3}
 
 Tento prístup je veľmi podobný prístupu číslo 2, rozdiel je iba vo výstupe siete. Namiesto toho, aby bol ťah zahrnutý v rozložení novej šachovnice, je výstupom explicitne daný ťah, t.j. súradnice políčka, \textbf{z} ktorého sa má figúrka pohnúť a súradnice \textbf{kam} sa má figúrka pohnúť.
+
+\mysmallsection{Výsledky}
+
+Problémom u všetkých typov prístupov bolo nájsť parametre siete tak, aby daný problém riešila. Skúšali sme mnoho kombinácii topológie siete a rýchlosti učenia, no vždy neúspešne. Pri prístupe 3, kedy funkčnosť siete vyzerala nádejne (nastavenie: 64, 128, 64, 16, 4), bol zase problém z výpočetného hľadiska. Odhad učenia bol asi tri dni a žiadny z nám prístupnych výpočetných serverov (Aisa, Aura) nepodporuje C++11 (Aisa zvláda iba c++0A.D. a Aura c++500BC). Preto sme nemali ako otestovať, či je sieť schopná sa tomuto prístupu naučiť. 
+
+\newpage
+\mysmallsection{Problém derivácie polynómu}
+
+Pre neúspech so šachovými ťahmi sme sa rozhodli riešiť ešte jeden problém. Ideou je, že sa sieti predhodí polynóm a ona vráti jeho deriváciu. 
+
+{\centering\textbf{Príklad}\\}
+
+Majme vstupný polynóm:
+
+\begin{equation}
+f(x)=5x^3 + 2x + 8
+\end{equation}
+
+Takýto polynóm bude v skutočnosti interpretovaný pre sieť nasledovne (uvažujme, že sieť je schopná načítavať polynómy stupňa maximálne 5):
+
+\begin{equation}
+f(x)=0x^5 + 0x^4 + 5x^3 + 0x^2 + 2x^1 + 8x^0
+\end{equation}
+
+\noindent takže konečným vstupom pre sieť je sekvencia čísel "\textbf{0 0 5 0 2 8}".
+
+Chceme dostať deriváciu tohto polynómu
+
+\begin{equation}
+f'(x)=15x^2 + 2
+\end{equation}
+
+\noindent čiže sekvenciu čísel "\textbf{0 0 15 0 2}", ktorá je o jednu číslicu kratšia.
 
 \end{document}
