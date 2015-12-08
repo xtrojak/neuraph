@@ -71,7 +71,7 @@ class Polynoms
 
     private:
         std::list< std::tuple< std::vector<f64>, std::vector<f64> > > Polys;
-        static constexpr i32 minCoeff = 0, maxCoeff = 99;
+        static constexpr i32 minCoeff = 0, maxCoeff = 10;
 
         std::mt19937 random_device;
 
@@ -82,8 +82,11 @@ class Polynoms
 
             std::vector<f64> polynomial;
             std::uniform_int_distribution<u32> coeffs_dis(minCoeff, maxCoeff);
-            for (u32 i = 0; i < degree; i++)
-                polynomial.push_back(coeffs_dis(random_device));
+            for (u32 i = 0; i <= maxD; i++)
+                if (i <= degree)
+                    polynomial.push_back(coeffs_dis(random_device));
+                else
+                    polynomial.push_back(0);
 
             Polys.push_back(std::make_tuple(polynomial, differentiate(polynomial)));
         }
