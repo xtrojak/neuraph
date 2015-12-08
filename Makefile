@@ -1,4 +1,4 @@
-FILES = Neuron.cpp Net.cpp Poly.cpp main.cpp
+FILES = Neuron.cpp Net.cpp Polynoms.cpp main.cpp
 
 all: 
 	g++ $(FILES) -lstdc++ -std=c++11 -Wall -I. -o main
