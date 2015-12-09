@@ -95,9 +95,9 @@ class Net
         static f64 activation_fn(f64 x, bool derivative) 
         { 
             if (derivative)
-                return x <= 0 ? 0 : 1; 
+                return 1;
             else
-                return x <= 0 ? 0 : x;
+                return x;
         } 
 
 

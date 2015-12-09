@@ -38,9 +38,9 @@ int main(int argc, char **argv)
         example_count += 100 - (example_count % 100);
 
         Net n(argv[3]);
-        Polynoms p(2, 5, example_count);
+        Polynoms p(2, 2, example_count);
         Net newN = n;
-        u32 progress = 0;
+        f64 progress = 0;
         
         cout << "Learning on " << example_count << " examples.\n";
         auto start = p.getPolynoms().begin(), end = start;
@@ -49,17 +49,18 @@ int main(int argc, char **argv)
         do
         {
             list<tuple<vector<f64>, vector<f64>>> is(start, end);
-            newN = backprop(is, 1, newN);
-
-            u32 new_p = 100-round((f64(p.getPolynoms().size())/example_count)*100);
-            if (progress != new_p)
-            {
-                cout << new_p << "%\t";
-                progress = new_p;
-            }
+            newN = backprop(is, 0.0001, newN);
 
             start = end;
             advance(end, 100);
+
+            f64 op = progress;
+            progress += f64(10000) / example_count;
+            if (floor(op) != floor(progress))
+            {
+                    cout << round(progress) << "%\t";
+                    cout.flush();
+            }
         }
         while (start != p.getPolynoms().end());
 

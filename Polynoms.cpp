@@ -71,7 +71,7 @@ class Polynoms
 
     private:
         std::list< std::tuple< std::vector<f64>, std::vector<f64> > > Polys;
-        static constexpr i32 minCoeff = 0, maxCoeff = 10;
+        static constexpr i32 minCoeff = 0, maxCoeff = 3;
 
         std::mt19937 random_device;
 
