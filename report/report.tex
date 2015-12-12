@@ -34,7 +34,7 @@ Použili sme záznamy šachových partií z Games of World Champions\footnotemar
 
 {\centering\textbf{Implementácia}\\}
 
-Implementovali sme viacvrstvú sieť (multilayer perceptron) a zpätnú propagáciu (backpropagation algorithm) v jazyku C++. Implementovali sme triedy pre neurón, sieť a šachovnicu. Urobili sme serializáciu siete tak, aby sme po ukončení učenia s ňou mohli znova pracovať aj s odstupom času. Celý program má 3 rôzne funkcie:
+Implementovali sme viacvrstvú sieť (multilayer perceptron) a spätnú propagáciu (backpropagation algorithm) v jazyku C++. Implementovali sme triedy pre neurón, sieť a šachovnicu. Urobili sme serializáciu siete tak, aby sme po ukončení učenia s ňou mohli znova pracovať aj s odstupom času. Celý program má 3 rôzne funkcie:
 
 \begin{itemize}
 \item \textbf{new} - vytvorenie novej siete, parameter je \textit{"počet neurónov vo vrstvách"} a názov siete
@@ -77,7 +77,7 @@ Nakoľko sme potrebovali rozsah hodnôt [-6, 6], ako aktivačnú funkciu sme zvo
 F_a(x)=12 \times tanh(\frac{x}{12})
 \end{equation}
 
-Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný tak, že na políčko, \textbf{z} ktorého sa figúrka hýbe, sa priradí číslo nula a políčko, \textbf{na} ktoré sa figúrka hýbe dostane pôvodnú hodnotu figúrky. Nakoľko v trénovacích dátach boli ťahy ako pre bieleho, tak i čierneho hráča, rozhodli sme sa používať iba biele ťahy. Tým sme dáta zmenšili o jenen rozmer (každý ťah čierneho hráča sa dá previesť na ťah bieleho hráča).
+Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný tak, že na políčko, \textbf{z} ktorého sa figúrka hýbe, sa priradí číslo nula a políčko, \textbf{na} ktoré sa figúrka hýbe dostane pôvodnú hodnotu figúrky. Nakoľko v trénovacích dátach boli ťahy ako pre bieleho, tak i čierneho hráča, rozhodli sme sa používať iba biele ťahy. Tým sme dáta zmenšili o jeden rozmer (každý ťah čierneho hráča sa dá previesť na ťah bieleho hráča).
 
 \newpage
 
@@ -104,7 +104,7 @@ Tento prístup je veľmi podobný prístupu číslo 2, rozdiel je iba vo výstup
 
 \mysmallsection{Výsledky}
 
-Problémom u všetkých typov prístupov bolo nájsť parametre siete tak, aby daný problém riešila. Skúšali sme mnoho kombinácii topológie siete a rýchlosti učenia, no vždy neúspešne. Pri prístupe 3, kedy funkčnosť siete vyzerala nádejne (nastavenie: 64, 128, 64, 16, 4), bol zase problém z výpočetného hľadiska. Odhad učenia bol asi tri dni a žiadny z nám prístupnych výpočetných serverov (Aisa, Aura) nepodporuje C++11 (Aisa zvláda iba c++0A.D. a Aura c++500BC). Preto sme nemali ako otestovať, či je sieť schopná sa tomuto prístupu naučiť. 
+Problémom u všetkých typov prístupov bolo nájsť parametre siete tak, aby daný problém riešila. Skúšali sme mnoho kombinácii topológie siete a rýchlosti učenia, no vždy neúspešne. Pri prístupe 3, kedy funkčnosť siete vyzerala nádejne (nastavenie: 64, 128, 64, 16, 4), bol zase problém z výpočetného hľadiska. Odhad učenia bol asi tri dni a žiadny z nám prístupnych výpočetných serverov (Aisa, Aura) nepodporuje C++11 (Aisa zvláda iba C++0A.D. a Aura C++500BC). Preto sme nemali ako otestovať, či je sieť schopná sa tomuto prístupu naučiť. 
 
 Preto sme rozhodli riešiť pomocou neurónových sieti iný problém.
 
@@ -143,7 +143,7 @@ Ako zdroj dát sme zvolili funkciu, ktorá vygeneruje náhodný polynón z dané
 
 {\vspace*{0.5cm}\centering\textbf{Implementácia}\\}
 
-Implementácia čo sa siete týka sa nezmenila. Pribudla trieda Polynoms, ktorá pracuje s polynómmi. Zásadnou je funkcia, ktorá generuje dáta pre sieť, t.j. dvojice vstup a výstup. Pre rozhranie to má dopad iba na volanie učenia:
+Implementácia čo sa siete týka sa nezmenila. Pribudla trieda Polynoms, ktorá pracuje s polynómami. Zásadnou je funkcia, ktorá generuje dáta pre sieť, t.j. dvojice vstup a výstup. Pre rozhranie to má dopad iba na volanie učenia:
 
 \begin{itemize}
 \item \textbf{learn} - spustí učenie pomocou spätnej propagácie nad daným počtom vstupných polynómov a sieťou
