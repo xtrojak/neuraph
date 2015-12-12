@@ -92,12 +92,14 @@ Tento prístup je veľmi podobný prístupu číslo 2, rozdiel je iba vo výstup
 
 Problémom u všetkých typov prístupov bolo nájsť parametre siete tak, aby daný problém riešila. Skúšali sme mnoho kombinácii topológie siete a rýchlosti učenia, no vždy neúspešne. Pri prístupe 3, kedy funkčnosť siete vyzerala nádejne (nastavenie: 64, 128, 64, 16, 4), bol zase problém z výpočetného hľadiska. Odhad učenia bol asi tri dni a žiadny z nám prístupnych výpočetných serverov (Aisa, Aura) nepodporuje C++11 (Aisa zvláda iba c++0A.D. a Aura c++500BC). Preto sme nemali ako otestovať, či je sieť schopná sa tomuto prístupu naučiť. 
 
+Preto sme rozhodli riešiť pomocou neurónových sieti iný problém.
+
 \newpage
 \mysmallsection{Problém derivácie polynómu}
 
-Pre neúspech so šachovými ťahmi sme sa rozhodli riešiť ešte jeden problém. Ideou je, že sa sieti predhodí polynóm a ona vráti jeho deriváciu. 
+Ideou je, že sa sieti na vstup dá polynóm a ona vráti jeho deriváciu. 
 
-{\centering\textbf{Príklad}\\}
+{\vspace*{0.5cm}\centering\textbf{Príklad}\\}
 
 Majme vstupný polynóm:
 
@@ -111,7 +113,7 @@ Takýto polynóm bude v skutočnosti interpretovaný pre sieť nasledovne (uvaž
 f(x)=0x^5 + 0x^4 + 5x^3 + 0x^2 + 2x^1 + 8x^0
 \end{equation}
 
-\noindent takže konečným vstupom pre sieť je sekvencia čísel "\textbf{0 0 5 0 2 8}".
+\noindent takže finálnym vstupom pre sieť je sekvencia čísel "\textbf{0 0 5 0 2 8}".
 
 Chceme dostať deriváciu tohto polynómu
 
@@ -120,5 +122,42 @@ f'(x)=15x^2 + 2
 \end{equation}
 
 \noindent čiže sekvenciu čísel "\textbf{0 0 15 0 2}", ktorá je o jednu číslicu kratšia.
+
+{\centering\textbf{Zdroj dát}\\}
+
+Ako zdroj dát sme zvolili funkciu, ktorá vygeneruje náhodný polynón z daného rozsahu hodnôt (maximálny stupeň polynómu a rozsah koeficientov) a zároveň vypočíta jeho deriváciu. 
+
+{\vspace*{0.5cm}\centering\textbf{Riešenie}\\}
+
+Nakoľko rozsah koeficientov, ktoré môžu byť v polynóme použité je z všeobecného hľadiska neobmedzený, rozhodli sme sa použiť lineárnu funkciu: 
+
+\begin{equation}
+F_a(x)=x~,
+\end{equation}
+
+\noindent ktorá má v každom bode deriváciu rovnú 1.  
+
+\mysmallsection{Výsledky}
+
+Prvým pokusom bolo realizovať derivovanie pomocou neurónovej siete na veľmi obmedzených polynómoch. Zvoli sme maximálny stupeň polynómu 3 a rozsah koeficientov ako [0, 3]. Topológiu siete sme zvolili "3~81~2". Problém bol v rýchlosti učenia, ktorú sme museli nastaviť na veľmi malú hodnotu, aby sa sieť správne učila -- 0.0001.
+
+Následne po dostatočnom učení (asi 20000 náhodne vygenerovaných polynómov) sme dosiahli pozitívne výsledky vo výstupoch siete. Tu je niekoľko príkladov:
+
+\begin{itemize}
+\item \begin{tabular}{ l l }
+		vstup: & $2 + 1x^1 + 3x^2$\\
+		derivácia: & $1.05352 + 5.89288x^1 $
+	  \end{tabular}
+\item \begin{tabular}{ l l }
+		vstup: & $2 + 1x^1$\\
+		derivácia: & $1.00556 + 0.129582x^1$
+	  \end{tabular}
+\item \begin{tabular}{ l l }
+		vstup: & $3 + 3x^1 + 3x^2$\\
+		derivácia: & $2.93755 + 5.82714x^1$
+	  \end{tabular}
+\end{itemize}
+
+Druhým výsledkom je iný prístup k učeniu. Namiesto toho, aby sme sieť učili konkrétne polynómy, dávali sme jej na vstup vždy iba jeden člen s nenulovým koeficientom. Tým sme chceli dosiahnuť \textit{nezávislosť} jednotlivých členov medzi sebou. 
 
 \end{document}
