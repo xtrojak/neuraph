@@ -4,9 +4,12 @@
 \usepackage{kpfonts}
 \usepackage{hyperref}
 \usepackage{amsthm}
+\usepackage{tikz}
 
 \newcommand{\mysection}[1]{{\newpage\centering\Large\textbf{#1}\\}\normalsize\vspace{0.1cm}}
 \newcommand{\mysmallsection}[1]{\vspace{0.5cm}{\centering\large\textbf{#1}\\}\normalsize\vspace{0.5cm}}
+
+\def\layersep{2.5cm}
 
 \begin{document}
 
@@ -35,8 +38,17 @@ Implementovali sme viacvrstvú sieť (multilayer perceptron) a zpätnú propagá
 
 \begin{itemize}
 \item \textbf{new} - vytvorenie novej siete, parameter je \textit{"počet neurónov vo vrstvách"} a názov siete
+
+{\centering\small ./main~new~`3~81~2'~my.net\\}
+
 \item \textbf{learn} - spustí učenie pomocou spätnej propagácie nad daným vstupným súborom dát a sieťou
+
+{\centering\small ./main learn input.txt my.net \\}
+
 \item \textbf{eval} - vyhodnotí sieť nad daným vstupom pre danú sieť
+
+{\centering\small ./main eval `8 5 1 5 8 4 1 4 8 3 8 6 1 3 ... 2 2 3 2 4 2 5 2 6 2 7 2 8' my.net \\}
+
 \end{itemize}
 
 \mysmallsection{Prístup 1}
@@ -67,11 +79,13 @@ F_a(x)=12 \times tanh(\frac{x}{12})
 
 Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný tak, že na políčko, \textbf{z} ktorého sa figúrka hýbe, sa priradí číslo nula a políčko, \textbf{na} ktoré sa figúrka hýbe dostane pôvodnú hodnotu figúrky. Nakoľko v trénovacích dátach boli ťahy ako pre bieleho, tak i čierneho hráča, rozhodli sme sa používať iba biele ťahy. Tým sme dáta zmenšili o jenen rozmer (každý ťah čierneho hráča sa dá previesť na ťah bieleho hráča).
 
+\newpage
+
 \mysmallsection{Prístup 2}
 
 Vstup tvorený FENmi sme iným scriptom previedli do sekvencie 64 číslic v rozsahu hodnôt [0, 8]. Čísla sú vnímané ako dvojice, kde každá dvojica predstavuje súradnice konkrétnej figúrky na šachovnici. Poradie figúrok je teda fixne dané. Ak sa figúrka na šachovnici nenachádza, dostane súradnice (0, 0).
 
-{\centering\textbf{Riešenie}\\}
+{\vspace*{0.5cm}\centering\textbf{Riešenie}\\}
 
 Pre potrebný rozsah hodnôt sme zvolili funkciu:
 
@@ -123,9 +137,24 @@ f'(x)=15x^2 + 2
 
 \noindent čiže sekvenciu čísel "\textbf{0 0 15 0 2}", ktorá je o jednu číslicu kratšia.
 
-{\centering\textbf{Zdroj dát}\\}
+{\vspace*{0.5cm}\centering\textbf{Zdroj dát}\\}
 
 Ako zdroj dát sme zvolili funkciu, ktorá vygeneruje náhodný polynón z daného rozsahu hodnôt (maximálny stupeň polynómu a rozsah koeficientov) a zároveň vypočíta jeho deriváciu. 
+
+{\vspace*{0.5cm}\centering\textbf{Implementácia}\\}
+
+Implementácia čo sa siete týka sa nezmenila. Pribudla trieda Polynoms, ktorá pracuje s polynómmi. Zásadnou je funkcia, ktorá generuje dáta pre sieť, t.j. dvojice vstup a výstup. Pre rozhranie to má dopad iba na volanie učenia:
+
+\begin{itemize}
+\item \textbf{learn} - spustí učenie pomocou spätnej propagácie nad daným počtom vstupných polynómov a sieťou
+
+{\centering\small ./main learn 10000 my.net \\}
+
+\item \textbf{eval} - vyhodnotí sieť nad daným vstupom pre danú sieť
+
+{\centering\small ./main eval `2 1 3' my.net \\}
+
+\end{itemize}
 
 {\vspace*{0.5cm}\centering\textbf{Riešenie}\\}
 
@@ -139,7 +168,7 @@ F_a(x)=x~,
 
 \mysmallsection{Výsledky}
 
-Prvým pokusom bolo realizovať derivovanie pomocou neurónovej siete na veľmi obmedzených polynómoch. Zvoli sme maximálny stupeň polynómu 3 a rozsah koeficientov ako [0, 3]. Topológiu siete sme zvolili "3~81~2". Problém bol v rýchlosti učenia, ktorú sme museli nastaviť na veľmi malú hodnotu, aby sa sieť správne učila -- 0.0001.
+Prvým pokusom bolo realizovať derivovanie pomocou neurónovej siete na veľmi obmedzených polynómoch. Zvolili sme maximálny stupeň polynómu 3 a rozsah koeficientov ako [0, 3]. Topológiu siete sme zvolili "3~81~2". Problém bol v rýchlosti učenia, ktorú sme museli nastaviť na veľmi malú hodnotu, aby sa sieť správne učila -- 0.0001.
 
 Následne po dostatočnom učení (asi 20000 náhodne vygenerovaných polynómov) sme dosiahli pozitívne výsledky vo výstupoch siete. Tu je niekoľko príkladov:
 
@@ -158,6 +187,55 @@ Následne po dostatočnom učení (asi 20000 náhodne vygenerovaných polynómov
 	  \end{tabular}
 \end{itemize}
 
-Druhým výsledkom je iný prístup k učeniu. Namiesto toho, aby sme sieť učili konkrétne polynómy, dávali sme jej na vstup vždy iba jeden člen s nenulovým koeficientom. Tým sme chceli dosiahnuť \textit{nezávislosť} jednotlivých členov medzi sebou. 
+Druhým výsledkom je iný prístup k učeniu. Namiesto toho, aby sme sieť učili konkrétne polynómy, dávali sme jej na vstup vždy iba jeden člen s nenulovým koeficientom. Tým sme chceli dosiahnuť \textit{nezávislosť} jednotlivých členov medzi sebou. Zvolili sme maximálny stupeň polynómu 4 a rozsah koeficientov ako [0, 10]. To znamená, že dokopy sme sieť učili iba sadou dát, kde sa vyskytovalo dokopy 55 roznych polynómov. Najprv sme zvolili topológiu siete "5~125~4", no postupne sme sa prepracovali až na minimálnu topológiu. Uvedomili sme si, že stačí sieť s topológiou "5~4":
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+    \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+    \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
+    \tikzstyle{input neuron}=[neuron, fill=green!50];
+    \tikzstyle{output neuron}=[neuron, fill=red!50];
+    \tikzstyle{annot} = [text width=4em, text centered]
+
+    % Draw the input layer nodes
+    \foreach \name / \y in {1,...,5}
+    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+        \node[input neuron] (I-\name) at (-\y, 0) {};
+
+	\foreach \name / \y in {1,...,4}
+    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+        \node[output neuron] (H-\name) at (-\y, \layersep) {};
+
+    % Connect every node in the input layer with every node in the
+    % hidden layer.
+    \foreach \source in {1,...,5}
+        \foreach \dest in {1,...,4}
+            \path (I-\source) edge (H-\dest);
+    \path (I-1) [red] edge node [red, right] {$4$} (H-1);
+    \path (I-2) [red] edge node [red, right] {$3$} (H-2);
+    \path (I-3) [red] edge node [red, right] {$2$} (H-3);
+    \path (I-4) [red] edge node [red, right] {$1$} (H-4);
+     
+
+    % Annotate the layers
+    \node[annot,left of=I-5, node distance=2cm] (hl) {Input layer};
+    \node[annot,above of=hl] {Output layer};
+\end{tikzpicture}
+\end{center}
+
+\noindent kde ostatné hrany majú váhu 0. 
+
+Preto sme sa pokúsili tento ideál dosiahnuť. Naša sieť si po učiacom pro učiacom procese nastavila na hranách takmer identické váhy, preto aj vracala celkom presné výsledky. Vďaka tomu sa naša sieť naučila pracovať s ľubovoľnými koeficientami bez toho, aby sme ju to museli explicitne učiť. Nemá problém ani s desatinnými a zápornými číslami. Príklady:
+
+\begin{itemize}
+\item \begin{tabular}{ l l }
+		vstup: & $20.5x^1 + 11.3x^2 + 2.5x^3 + -0.5x^4$\\
+		derivácia: & $20.485 + 22.5747x^1 + 7.46458x^2 + -2.04699x^3$
+	  \end{tabular}
+\item \begin{tabular}{ l l }
+		vstup: & $20.5x^1 + 11.3x^2 + 20x^3 + -500x^4$\\
+		derivácia: & $20.7582 + 23.0364x^1 + 60.6112x^2 + -1999.19x^3$
+	  \end{tabular}
+\end{itemize}
 
 \end{document}
