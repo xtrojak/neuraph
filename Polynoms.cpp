@@ -41,7 +41,7 @@ class Polynoms
 			{
 				try
 				{
-					p.push_back(std::stoi(item));
+					p.push_back(std::stof(item));
 				}
 				catch (std::exception &e)
 				{
