@@ -15,8 +15,8 @@ class Polynoms
         {
             random_device.seed(std::time(nullptr));
 
-            for (u32 i = 0; i < count; i++)
-                generate(minDeg, maxDeg);
+            while (Polys.size() < count)
+                generate_singles(minDeg, maxDeg);
         }
 
         static void print(const std::vector<f64> &poly)
@@ -71,7 +71,7 @@ class Polynoms
 
     private:
         std::list< std::tuple< std::vector<f64>, std::vector<f64> > > Polys;
-        static constexpr i32 minCoeff = 0, maxCoeff = 3;
+        static constexpr i32 minCoeff = 1, maxCoeff = 10;
 
         std::mt19937 random_device;
 
@@ -87,6 +87,18 @@ class Polynoms
                     polynomial.push_back(coeffs_dis(random_device));
                 else
                     polynomial.push_back(0);
+
+            Polys.push_back(std::make_tuple(polynomial, differentiate(polynomial)));
+        }
+
+        void generate_singles(u32 minD, u32 maxD)
+        {
+            std::vector<f64> polynomial;
+            polynomial.assign(maxD, 0);
+
+            std::uniform_int_distribution<u32> coeff_dis(minD-1, maxD-1);
+            std::uniform_int_distribution<u32> coeffs_dis(minCoeff, maxCoeff);
+            polynomial.at(coeff_dis(random_device)) = coeffs_dis(random_device);
 
             Polys.push_back(std::make_tuple(polynomial, differentiate(polynomial)));
         }
