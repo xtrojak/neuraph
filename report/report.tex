@@ -22,19 +22,19 @@ Adam Krupička, Matej Troják
 V našom projekte sme chceli riešiť problém pohybu šachových figúrok po šachovnici. Napadlo nás niekoľko prístupov, ako tento problém riešiť:
 
 \begin{enumerate}
-\item dať sieti na vstup celú šachovnicu a na výstupe očakávať opäť šacho-vnicu, avšak pozmenenú o jeden validný ťah,
-\item dať sieti na vstup pozície jednotlivých figúrok a na výstupe očakávať pozmenené pozície figúrok,
-\item dať sieti na vstup celú šachovnicu/pozície figúrok a očakávať na~výstu-pe ťah, ktorý sa má vykonať, t.j. súradnice políčka s \textit{nejakou} figúrkou a súradnice, kam sa má posunúť,
-\item dať sieti na vstup dve šachovnice a sieť odpovie hodnotou medzi 0~a~1 ako \textit{dobrý} je ťah (inšpirované iným zdrojom, neriešené)
+\item vstupom je celá šachovnica a výstupom opäť šachovnica, avšak pozmenená o jeden validný ťah,
+\item vstupom sú pozície jednotlivých figúrok a výstupom pozmenené pozí-cie figúrok,
+\item vstupom je celá šachovnica/pozície figúrok a výstupom ťah, ktorý sa má vykonať, t.j. súradnice políčka s \textit{nejakou} figúrkou a súradnice, kam sa má posunúť,
+\item vstupom sú dve šachovnice a sieť odpovie hodnotou medzi 0~a~1 ako \textit{dobrý} je ťah (inšpirované iným zdrojom, neriešené)
 \end{enumerate}
 
 {\centering\textbf{Zdroj dát}\\}
 
-Použili sme záznamy šachových partií z Games of World Champions\footnotemark[1]\footnotetext[1]{\url{http://www.chess.com/download/view/games-of-world-champions}}. Na dáta sme využili voľne dostupný parser, ktorý ich prekonvertoval do~for-mátu FEN (Forsyth–Edwards Notation), čo je štandardná notácia pre popis priebehu šachovej partie tak, aby mohla byť opätovne zrekonštruo-vaná. \\
+Použili sme záznamy šachových partií z Games of World Champions\footnotemark[1]\footnotetext[1]{\url{http://www.chess.com/download/view/games-of-world-champions}}. Na dáta sme využili voľne dostupný parser, ktorý ich prekonvertoval do~for-mátu FEN (Forsyth–Edwards Notation), čo je štandardná notácia pre popis priebehu šachovej partie tak, aby mohla byť opätovne zrekonštruovaná. \\
 
 {\centering\textbf{Implementácia}\\}
 
-Implementovali sme viacvrstvú sieť (multilayer perceptron) a spätnú propagáciu (backpropagation algorithm) v jazyku C++. Implementovali sme triedy pre neurón, sieť a šachovnicu. Urobili sme serializáciu siete tak, aby sme po ukončení učenia s ňou mohli znova pracovať aj s odstupom času. Celý program má 3 rôzne funkcie:
+Implementovali sme viacvrstvú sieť (multilayer perceptron) a spätnú propagáciu (backpropagation algorithm) v jazyku C++. Implementovali sme triedy pre neurón, sieť a šachovnicu. Urobili sme serializáciu siete tak, aby sme po ukončení učenia s ňou mohli znova pracovať. Celý program má 3 rôzne funkcie:
 
 \begin{itemize}
 \item \textbf{new} - vytvorenie novej siete, parameter je \textit{"počet neurónov vo vrstvách"}
@@ -71,7 +71,7 @@ Vstup tvorený FENmi sme jednoduchým skriptom previedli do sekvencie 64 čísli
 }
 \end{center}
 
-prázdne políčko má hodnotu 0.
+\noindent a prázdne políčko má hodnotu 0.
 
 {\vspace*{0.5cm}\centering\textbf{Riešenie}\\}
 
@@ -81,7 +81,7 @@ Nakoľko sme potrebovali rozsah hodnôt [-6, 6], ako aktivačnú funkciu sme zvo
 F_a(x)=12 \times tanh(\frac{x}{12})
 \end{equation}
 
-Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný tak, že na políčko, \textbf{z} ktorého sa figúrka hýbe, sa priradí číslo nula a políčko, \textbf{na} ktoré sa figúrka hýbe dostane pôvodnú hodnotu figúrky. Nakoľko v~tré-novacích dátach boli ťahy ako pre bieleho, tak i čierneho hráča, rozhodli sme sa používať iba biele ťahy. Tým sme dáta zmenšili o jeden rozmer (každý ťah čierneho hráča sa dá previesť na ťah bieleho hráča).
+Trénovacie dáta boli dvojice sekvencií 64 číslic. Ťah je reprezentovaný tak, že na políčko, \textbf{z} ktorého sa figúrka hýbe, sa priradí číslo nula a políčko, \textbf{na} ktoré sa figúrka hýbe, dostane pôvodnú hodnotu figúrky. Nakoľko v~tré-novacích dátach boli ťahy ako pre bieleho, tak i čierneho hráča, rozhodli sme sa používať iba biele ťahy. Tým sme dáta zmenšili o jeden rozmer (každý ťah čierneho hráča sa dá previesť na ťah bieleho hráča).
 
 \newpage
 
@@ -100,7 +100,7 @@ Pre potrebný rozsah hodnôt sme zvolili funkciu:
   \end{cases}
 \]
 
-Ťah je reprezentovaný zmenou súradníc jednej figúrky. V prípade, ak sa jedná o ťah, kedy nepriateľ stráca figúrku (t.j. figúrka sa presúva na~súrad-nice už zahrnuté v sekvencii súradníc), súradnice vyhodenej figúrky sú~(0,~0).
+Ťah je reprezentovaný zmenou súradníc jednej figúrky. V prípade, ak sa jedná o ťah, kedy súper stráca figúrku (t.j. figúrka sa presúva na~súrad-nice už zahrnuté v sekvencii súradníc), súradnice vyhodenej figúrky sú nastavené na hodnoty (0,~0).
 
 \mysmallsection{Prístup 3}
 
@@ -108,18 +108,18 @@ Tento prístup je veľmi podobný prístupu číslo 2, rozdiel je iba vo výstu-
 
 \mysmallsection{Výsledky}
 
-Problémom u všetkých typov prístupov bolo nájsť parametre siete tak, aby daný problém riešila. Skúšali sme mnoho kombinácii topológie siete a rýchlosti učenia, no vždy neúspešne. Pri prístupe 3, kedy funkčnosť siete vyzerala nádejne (nastavenie: 64, 128, 64, 16, 4), bol zase problém z výpočetného hľadiska. Odhad učenia bol asi tri dni a nemali sme prostriedky ako otestovať, či je sieť schopná sa tomuto prístupu naučiť.
+Problémom u všetkých typov prístupov bolo nájsť parametre siete tak, aby sa daný problém naučila vyhodnocovať. Skúšali sme mnoho kombinácii topológie siete a rýchlosti učenia, no vždy neúspešne. Pri prístupe 3, kedy funkčnosť siete vyzerala nádejne (nastavenie: 64, 128, 64, 16, 4), bol zase problém z výpočetného hľadiska. Odhad učenia na našich dátach bol asi tri dni a nemali sme prostriedky ako otestovať, či je sieť schopná sa tomuto prístupu naučiť.
 
 Preto sme rozhodli riešiť pomocou neurónových sieti iný problém.
 
 \newpage
 \mysmallsection{Problém derivácie polynómu}
 
-Ideou je, že sa sieti na vstup dá polynóm a ona vráti jeho deriváciu. 
+\noindent Ideou je, že sa sieti na vstup dá polynóm a ona vráti jeho deriváciu. 
 
 {\vspace*{0.5cm}\centering\textbf{Príklad}\\}
 
-Majme vstupný polynóm:
+\noindent Majme vstupný polynóm:
 
 \begin{equation}
 f(x)=5x^3 + 2x + 8
@@ -147,7 +147,7 @@ Ako zdroj dát sme zvolili funkciu, ktorá vygeneruje náhodný polynóm z dané
 
 {\vspace*{0.5cm}\centering\textbf{Implementácia}\\}
 
-Implementácia čo sa siete týka sa nezmenila. Pribudla trieda Polynoms, ktorá pracuje s polynómami. Zásadnou je funkcia, ktorá generuje dáta pre sieť, t.j. dvojice vstup a výstup. Pre rozhranie to má dopad iba na~volanie učenia:
+Implementácia čo sa siete týka sa nezmenila. Pribudla trieda Polynoms, ktorá pracuje s polynómami. Zásadnou je funkcia, ktorá generuje dáta pre sieť, t.j. dvojice vstup a výstup. Pre rozhranie to má dopad na~nasledujúcu funkcionalitu:
 
 \begin{itemize}
 \item \textbf{learn} - spustí učenie pomocou spätnej propagácie nad daným
@@ -193,7 +193,7 @@ Následne po dostatočnom učení (asi 20000 náhodne vygenerovaných polynómov
 	  \end{tabular}
 \end{itemize}
 
-Druhým výsledkom je iný prístup k učeniu. Namiesto toho, aby sme sieť učili konkrétne polynómy, dávali sme jej na vstup vždy iba jeden člen s nenulovým koeficientom. Tým sme chceli dosiahnuť \textit{nezávislosť} jednotlivých členov medzi sebou. Zvolili sme maximálny stupeň polynómu 4 a~rozsah koeficientov ako [0, 10]. To znamená, že dokopy sme sieť učili iba sadou dát, kde sa vyskytovalo dokopy 55 rôznych polynómov. Zvolili sme minimálnu topológiu siete, čiže "5~4":
+Druhým výsledkom je iný prístup k učeniu. Namiesto toho, aby sme sieť učili konkrétne polynómy, dávali sme jej na vstup vždy iba jeden člen s nenulovým koeficientom. Tým sme chceli dosiahnuť \textit{nezávislosť} jednotlivých členov medzi sebou. Zvolili sme maximálny stupeň polynómu 4 a~rozsah koeficientov ako [0, 10]. To znamená, že dokopy sme sieť učili iba sadou dát, kde sa vyskytovalo dokopy 55 rôznych polynómov. Zvolili sme minimálnu topológiu siete, čiže "5~4". Ideálna sieť by vyzerala takto:
 
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
