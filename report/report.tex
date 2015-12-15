@@ -8,6 +8,7 @@
 
 \newcommand{\mysection}[1]{{\newpage\centering\Large\textbf{#1}\\}\normalsize\vspace{0.1cm}}
 \newcommand{\mysmallsection}[1]{\vspace{0.5cm}{\centering\large\textbf{#1}\\}\normalsize\vspace{0.5cm}}
+\newcommand*\arc{{\fontfamily{pbk}\fontseries{db}\selectfont+}}
 
 \def\layersep{2.5cm}
 
@@ -180,16 +181,16 @@ Následne po dostatočnom učení (asi 20000 náhodne vygenerovaných polynómov
 
 \begin{itemize}
 \item \begin{tabular}{ l l }
-		vstup: & $2 + 1x^1 + 3x^2$\\
-		derivácia: & $1.05352 + 5.89288x^1 $
+		vstup: & $2$~\arc~$1x^1$~\arc~$3x^2$\\
+		derivácia: & $1.05352$~\arc~$5.89288x^1 $
 	  \end{tabular}
 \item \begin{tabular}{ l l }
-		vstup: & $2 + 1x^1$\\
-		derivácia: & $1.00556 + 0.129582x^1$
+		vstup: & $2$~\arc~$1x^1$\\
+		derivácia: & $1.00556$~\arc~$0.129582x^1$
 	  \end{tabular}
 \item \begin{tabular}{ l l }
-		vstup: & $3 + 3x^1 + 3x^2$\\
-		derivácia: & $2.93755 + 5.82714x^1$
+		vstup: & $3$~\arc~$3x^1$~\arc~$3x^2$\\
+		derivácia: & $2.93755$~\arc~$5.82714x^1$
 	  \end{tabular}
 \end{itemize}
 
@@ -228,12 +229,12 @@ Preto sme sa pokúsili tento ideál dosiahnuť. Naša sieť si po učiacom proce
 
 \begin{itemize}
 \item \begin{tabular}{ l l }
-		vstup: & $20.5x^1 + 11.3x^2 + 2.5x^3 + -0.5x^4$\\
-		derivácia: & $20.485 + 22.5747x^1 + 7.46458x^2 + -2.04699x^3$
+		vstup: & $20.5x^1$~\arc~$11.3x^2$~\arc~$2.5x^3$~\arc~$-0.5x^4$\\
+		derivácia: & $20.48$~\arc~$22.5747x^1$~\arc~$7.46458x^2$~\arc~$-2.04699x^3$
 	  \end{tabular}
 \item \begin{tabular}{ l l }
-		vstup: & $20.5x^1 + 11.3x^2 + 20x^3 + -500x^4$\\
-		derivácia: & $20.7582 + 23.0364x^1 + 60.6112x^2 + -1999.19x^3$
+		vstup: & $20.5x^1$~\arc~$11.3x^2$~\arc~$20x^3$~\arc~$-500x^4$\\
+		derivácia: & $20.7582$~\arc~$23.0364x^1$~\arc~$60.6112x^2$~\arc~$-1999.19x^3$
 	  \end{tabular}
 \end{itemize}
 
