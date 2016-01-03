@@ -15,9 +15,9 @@ int main(int argc, char **argv)
     if (argc < 2 || string(argv[1]) == "help")
     {
         cout << "Example usage:\n\t" << argv[0] <<
-            "\tnew \"2 3 3 2\" my.net\n\
-            \tlearn chess.data my.net\n\
-            \teval \"2 3 4 5 6 4 3 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 -1 -1 -1 -1 -1 -1 -1 -2 -3 -4 -5 -6 -4 -3 -2\" my.net\n\n";
+            "\tnew \"5 4\" my.net\n\
+            \tlearn 10000 my.net\n\
+            \teval \"2 3 4 5 -6\" my.net\n\n";
     }
     else if (string(argv[1]) == "new")
     {
