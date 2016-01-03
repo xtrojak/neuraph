@@ -16,7 +16,7 @@ int main(int argc, char **argv)
         cout << "Example usage:\n\t" << argv[0] <<
             "\tnew \"2 3 3 2\" my.net\n\
             \tlearn chess.data my.net\n\
-            \teval \"2 3 4 5 6 4 3 2 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 -1 -1 -1 -1 -1 -1 -1 -2 -3 -4 -5 -6 -4 -3 -2\" my.net\n\n";
+            \teval \"8 5 1 5 8 4 1 4 8 3 8 6 1 3 1 6 8 2 8 7 1 2 1 7 8 1 8 8 1 1 1 8 7 1 7 2 7 3 7 4 7 5 7 6 7 7 7 8 2 1 2 2 2 3 2 4 2 5 2 6 2 7 2 8\" my.net\n\n";
     }
     else if (string(argv[1]) == "new")
     {
